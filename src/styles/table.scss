@@ -1,0 +1,15 @@
+.el-table{
+  .el-table__inner-wrapper{
+    .el-table__body-wrapper{
+      tbody{
+        .el-table__row{
+          .el-radio{
+            .el-radio__label{
+              display: none !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
