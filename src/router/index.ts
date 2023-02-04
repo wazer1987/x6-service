@@ -8,7 +8,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/nodeconfig',
     name: 'nodeconfig',
-    component: import('@/views/ServiceOrchestration/NodeConfigPage/index.vue')
+    component: () => import('@/views/ServiceOrchestration/NodeConfigPage/index.vue')
   },
   {
     path: '/x6service',
