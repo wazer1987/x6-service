@@ -38,6 +38,7 @@ const delNodeConfig = (): void => {
   const index = data.findIndex((item:any) => item.id === radioId.value)
   data.splice(index, 1)
   editConfigList(data)
+  btnLoading.value = false
   init()
 }
 </script>
@@ -75,8 +76,6 @@ const delNodeConfig = (): void => {
                          prop="nodeShape" />
         <el-table-column label="服务类型"
                          prop="serviceType" />
-        <el-table-column label="服务属性"
-                         prop="serviceProp" />
       </el-table>
     </div>
     <DialogForm @initList="init" ref="DialogFormDom"/>

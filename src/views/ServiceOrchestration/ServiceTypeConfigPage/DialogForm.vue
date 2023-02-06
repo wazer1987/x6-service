@@ -11,7 +11,7 @@ defineExpose({
 
 <template>
   <el-dialog v-model="states.dialogVisible" :close-on-click-modal="false" :title="states.title" width="30%">
-    <Form ref="refFormDom" />
+    <Form ref="refFormDom" :logic="states.flag"/>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="states.dialogVisible = false">取消</el-button>

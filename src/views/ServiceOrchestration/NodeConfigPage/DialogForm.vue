@@ -19,6 +19,7 @@ const openDialog = (flag: string, row?: any): void => {
   statusFlag.value = flag
   currentRow = row
   nextTick(() => {
+    refFormDom.value.initOptions()
     status[statusFlag.value].init(refFormDom.value, currentRow, pageStatus)
   })
 }

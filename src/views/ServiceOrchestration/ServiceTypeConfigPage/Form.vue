@@ -1,6 +1,8 @@
 <!-- eslint-disable no-undef -->
 <script setup>
+import ServicePropItem from '@/components/ServicePropItem.vue'
 import { reactive, ref } from 'vue'
+
 const form = reactive({
   id: '',
   serviceType: '',
@@ -30,7 +32,7 @@ defineExpose({
       <el-input v-model="form.serviceValue" />
     </el-form-item>
     <el-form-item label="服务属性:" prop="serviceProp">
-      <el-input v-model="form.serviceProp" />
+      <ServicePropItem v-model="form.serviceProp"  v-bind="$attrs"/>
     </el-form-item>
   </el-form>
 </template>

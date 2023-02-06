@@ -25,3 +25,14 @@ export const getItem = (key:string) => {
 export const setItem = (key:string, value:any) => {
   localStorage.setItem(key, JSON.stringify(value))
 }
+
+// 服务属性
+export const SERVICE_PROP_KEY = 'servicePropsList'
+
+export const getServicePropItem = () => {
+  return JSON.parse(localStorage.getItem(SERVICE_PROP_KEY) as string)
+}
+
+export const setServicePropItem = (data:any) => {
+  localStorage.setItem(SERVICE_PROP_KEY, JSON.stringify(data))
+}

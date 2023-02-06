@@ -1,25 +1,26 @@
 <script setup>
 import { reactive, ref } from 'vue'
+import { getItem } from '@/utils/index'
 const form = reactive({
   id: '',
   nodeName: '',
   nodeShape: '',
-  serviceType: '',
-  serviceProp: ''
+  serviceType: ''
 })
+const options = ref([])
 const formRef = ref(null)
 const clearForm = () => {
   formRef.value.resetFields()
 }
-// const test = () => {
-//   form = {
-//     id: 3
-//   }
-// }
+const initOptions = () => {
+  options.value = getItem('serviceList')
+}
+
 // eslint-disable-next-line no-undef
 defineExpose({
   form,
-  clearForm
+  clearForm,
+  initOptions
 })
 </script>
 
@@ -36,10 +37,9 @@ defineExpose({
       <el-input v-model="form.nodeShape" />
     </el-form-item>
     <el-form-item label="服务类型:" prop="serviceType">
-      <el-input v-model="form.serviceType" />
-    </el-form-item>
-    <el-form-item label="服务属性:" prop="serviceProp">
-      <el-input v-model="form.serviceProp" />
+      <el-select style="width:100%;" v-model="form.serviceType">
+        <el-option v-for="item in options" :key="item.serviceProp" :label="item.serviceType" :value="item.serviceProp" />
+      </el-select>
     </el-form-item>
   </el-form>
 </template>
