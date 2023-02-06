@@ -14,6 +14,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/x6service',
     name: 'x6service',
     component: () => import('@/views/ServiceOrchestration/X6Service/index.vue')
+  },
+  {
+    path: '/serviceconfig',
+    name: 'serviceconfig',
+    component: () => import('@/views/ServiceOrchestration/ServiceTypeConfigPage/index.vue')
   }
 ]
 

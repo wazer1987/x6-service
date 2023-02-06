@@ -12,6 +12,16 @@ export const setConfigList = (value:any):void => {
   }
 }
 
+export const SERVICE_KEY = 'serviceList'
+
 export const editConfigList = (data:any) => {
   localStorage.setItem('nodeList', JSON.stringify(data))
+}
+
+export const getItem = (key:string) => {
+  return JSON.parse(localStorage.getItem(key) as string)
+}
+
+export const setItem = (key:string, value:any) => {
+  localStorage.setItem(key, JSON.stringify(value))
 }
