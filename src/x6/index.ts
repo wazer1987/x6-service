@@ -47,8 +47,9 @@ export const initX6 = (Dom: HTMLDivElement) => {
       minScale: 0.5,
       maxScale: 3
     },
+
     connecting: {
-      // router: 'orth'
+      router: 'orth',
       // router: {
       //   name: 'orth',
       //   args: {
@@ -61,31 +62,42 @@ export const initX6 = (Dom: HTMLDivElement) => {
       //     radius: 8
       //   }
       // },
-      // anchor: 'center',
+      anchor: 'center',
       // connectionPoint: 'anchor',
-      // allowBlank: false,
-      // snap: {
-      //   radius: 20
-      // },
-      // createEdge () {
-      //   return new Shape.Edge({
-      //     attrs: {
-      //       line: {
-      //         stroke: 'red',
-      //         strokeWidth: 1,
-      //         targetMarker: {
-      //           name: 'block',
-      //           width: 12,
-      //           height: 8
-      //         }
-      //       }
-      //     },
-      //     zIndex: 0
-      //   })
-      // },
-      // validateConnection ({ targetMagnet }) {
-      //   return !!targetMagnet
-      // }
+      // 起始和终止只允许创建一条边
+      allowMulti: false,
+      // 是否可以链接到画布空白位置
+      allowBlank: false,
+      // 是否允许 线链接到节点上 而非连接庄上
+      allowNode: true,
+      // 是否允许 线链接到 连接庄 false 是链接不到链接庄
+      allowPort: true,
+      // 碰到链接庄的时候 自动吸附
+      snap: {
+        radius: 20
+      },
+      // 初始化了边
+      createEdge () {
+        return new Shape.Edge({
+          attrs: {
+            line: {
+              stroke: '#ddd',
+              strokeWidth: 2, // 线宽
+              // 箭头
+              targetMarker: {
+                name: 'block',
+                width: 12,
+                height: 8
+              }
+            }
+          },
+          zIndex: 0
+        })
+      },
+      // 判断连链接是否有效
+      validateConnection ({ targetMagnet }) {
+        return !!targetMagnet
+      }
     },
     // 连线的时候高亮 链接庄的
     highlighting: {
