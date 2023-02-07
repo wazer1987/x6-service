@@ -8,6 +8,11 @@ const form = reactive({
   serviceType: ''
 })
 const options = ref([])
+const shapeOptions = ref([
+  { label: '矩形', value: 'rect' },
+  { label: '圆形', value: 'circle' },
+  { label: '多边形', value: 'polygon' }
+])
 const formRef = ref(null)
 const clearForm = () => {
   formRef.value.resetFields()
@@ -34,7 +39,9 @@ defineExpose({
       <el-input v-model="form.nodeName" />
     </el-form-item>
     <el-form-item label="节点形状:" prop="nodeShape">
-      <el-input v-model="form.nodeShape" />
+      <el-select style="width:100%;" v-model="form.nodeShape">
+        <el-option v-for="item in shapeOptions" :key="item.value" :label="item.label" :value="item.value" />
+      </el-select>
     </el-form-item>
     <el-form-item label="服务类型:" prop="serviceType">
       <el-select style="width:100%;" v-model="form.serviceType">

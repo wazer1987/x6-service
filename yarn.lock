@@ -19,6 +19,38 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
+"@antv/x6-common@^2.0.x":
+  version "2.0.6"
+  resolved "https://registry.npmmirror.com/@antv/x6-common/-/x6-common-2.0.6.tgz#53dd4d0ef754adac3216c829f8694827edbcc03d"
+  integrity sha512-rO5URcanRIeuo4DLAlyWnj3y2luAMD0yijKxrlm4DCm9QednxwUq9unnu6vnypU0VsRuQpg+q0bH9W9Ux80bjw==
+  dependencies:
+    lodash-es "^4.17.15"
+    utility-types "^3.10.0"
+
+"@antv/x6-geometry@^2.0.x":
+  version "2.0.4"
+  resolved "https://registry.npmmirror.com/@antv/x6-geometry/-/x6-geometry-2.0.4.tgz#d08213e200e16c8d065a0235189239cb367a0797"
+  integrity sha512-dlsLNRRTiCw8TsJ/03j3y5IbbbK4Npf6zBH6kAx8nnW+edNT/TAOChvPRzizwD+vA7wY9Rp2AiRnp/vCdIYC5w==
+
+"@antv/x6-plugin-dnd@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.npmmirror.com/@antv/x6-plugin-dnd/-/x6-plugin-dnd-2.0.4.tgz#4358f424526731727d7392eddafad5018116cdfc"
+  integrity sha512-DOT6/chhW67vD7+XXsvHs0ch01uqxyE7kbdrojgAsKftYmjXR+IveiXP7hzV0ObJ3k3V17xd3887f40S0Naxbg==
+
+"@antv/x6-plugin-stencil@^2.0.0":
+  version "2.0.2"
+  resolved "https://registry.npmmirror.com/@antv/x6-plugin-stencil/-/x6-plugin-stencil-2.0.2.tgz#9cca15a122f921dca615f1bd98431057e469c988"
+  integrity sha512-BOOdCZdVxJ45y39wnJN5w2Dg0ODnY6AxSidSGYGFtX2tF23JUnDiZx+ZWTzqvDHfcHU5c2LYd8TM3UhneU1c5w==
+
+"@antv/x6@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.npmmirror.com/@antv/x6/-/x6-2.3.0.tgz#a52227c49ccd14451a784025130f1358c20c3708"
+  integrity sha512-fnhr26F7ztPmNjjm670QvA/yD09bQNn4MYAQaLDhqBzbRwA3eGZjYuljFvXjstOq18VG2lzFpIiAEeqJkYVIwA==
+  dependencies:
+    "@antv/x6-common" "^2.0.x"
+    "@antv/x6-geometry" "^2.0.x"
+    utility-types "^3.10.0"
+
 "@babel/code-frame@7.12.11":
   version "7.12.11"
   resolved "https://registry.npmmirror.com/@babel/code-frame/-/code-frame-7.12.11.tgz#f4ad435aa263db935b8f10f2c552d23fb716a63f"
@@ -3725,7 +3757,7 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
-lodash-es@^4.17.21:
+lodash-es@^4.17.15, lodash-es@^4.17.21:
   version "4.17.21"
   resolved "https://registry.npmmirror.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
   integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
@@ -5679,6 +5711,11 @@ utila@~0.4:
   version "0.4.0"
   resolved "https://registry.npmmirror.com/utila/-/utila-0.4.0.tgz#8a16a05d445657a3aea5eecc5b12a4fa5379772c"
   integrity sha512-Z0DbgELS9/L/75wZbro8xAnT50pBVFQZ+hUEueGDU5FN51YSCYM+jdxsfCiHjwNP/4LCDD0i/graKpeBnOXKRA==
+
+utility-types@^3.10.0:
+  version "3.10.0"
+  resolved "https://registry.npmmirror.com/utility-types/-/utility-types-3.10.0.tgz#ea4148f9a741015f05ed74fd615e1d20e6bed82b"
+  integrity sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==
 
 utils-merge@1.0.1:
   version "1.0.1"
