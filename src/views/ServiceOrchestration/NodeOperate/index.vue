@@ -1,7 +1,6 @@
 <!-- eslint-disable no-undef -->
 <script setup lang="ts">
-import { objectExpression } from '@babel/types'
-import { reactive, ref } from 'vue'
+import { nextTick, reactive, ref, toRaw } from 'vue'
 
 const drawer = ref(false)
 const activeName = ref('nodeConfig')
@@ -33,10 +32,31 @@ const config = {
 const save = () => {
   currentNode.value.prop('position', { x: Number(form.position.x), y: Number(form.position.y) })
   currentNode.value.prop('size', { width: Number(form.size.width), height: Number(form.size.height) })
+  const obj = toRaw(form.attrs)
+  console.log(obj, '===obj')
+
   currentNode.value.prop('attrs', {
-    text: { ...form.attrs.text },
-    [shapeFlag.value]: { ...form.attrs[shapeFlag.value] }
+    ...obj,
+    label: {
+      ...obj.label,
+      text: obj.label.text
+    },
+    body: {
+      fill: obj.body.fill,
+      stroke: obj.body.stroke,
+      strokeWidth: obj.body.strokeWidth
+    }
   })
+  // console.log(form.attrs.body.fill, 'form.attrs.body.fill')
+  // currentNode.value.attr('rect/fill', form.attrs.body.fill)
+  // currentNode.value.attr('text/text', form.attrs.label.text)
+
+  // currentNode.value.prop('attrs', {
+  //   // text: {
+  //   //   text: form.attrs.text.text
+  //   // }
+  //   // [shapeFlag.value]: { ...form.attrs[shapeFlag.value] }
+  // })
   // for (const key in config) {
   //   if (key === 'position') {
   //     // currentNode.value.prop('position', { x: Number(form.position.x), y: Number(form.position.y) })
@@ -60,11 +80,15 @@ const save = () => {
 const openDrawer = (node:any) => {
   currentNode.value = node
   const config = node.prop()
+  console.log(config, '===config')
+
   const shapeArr = config.shape.split('-')
   shapeFlag.value = shapeArr[shapeArr.length - 1]
-  // form = config
-  // console.log(form)
-  Object.assign(form, config)
+  for (const key in config) {
+    form[key] = config[key]
+  }
+  console.log(form, '==form')
+
   activeName.value = 'nodeConfig'
   drawer.value = true
 }
@@ -78,8 +102,8 @@ defineExpose({
     <el-tabs type="border-card" v-model="activeName">
       <el-tab-pane name="nodeConfig" label="节点设置">
         <el-form :model="form" label-position="left" label-width="100px">
-          <el-form-item label="节点id:">
-            <el-input v-model="form.id" />
+          <el-form-item  label="节点id:">
+            <el-input disabled v-model="form.id" />
           </el-form-item>
           <el-form-item label="节点宽度:">
             <el-input v-model="form.size.width" />
@@ -88,16 +112,16 @@ defineExpose({
             <el-input v-model="form.size.height" />
           </el-form-item>
           <el-form-item label="节点背景色:">
-            <el-input v-model="form.attrs[shapeFlag].fill" />
+            <el-input v-model="form.attrs.body.fill" />
           </el-form-item>
           <el-form-item label="节点名称:">
-            <el-input v-model="form.attrs.text.text" />
+            <el-input v-model="form.attrs.label.text" />
           </el-form-item>
           <el-form-item label="节点边框颜色:">
-            <el-input v-model="form.attrs[shapeFlag].stroke" />
+            <el-input v-model="form.attrs.body.stroke" />
           </el-form-item>
           <el-form-item label="节点边框粗细:">
-            <el-input v-model="form.attrs[shapeFlag].strokeWidth" />
+            <el-input v-model="form.attrs.body.strokeWidth" />
           </el-form-item>
           <el-form-item label="节点x坐标:">
             <el-input v-model="form.position.x" />

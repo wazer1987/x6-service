@@ -20,6 +20,11 @@ export const initCreateNode = (item:NodeListItem, graph:Graph) => {
   return graph.createNode({
     shape: `custom-${item.id}-${item.nodeShape}`,
     label: `${item.nodeName}`,
+    attrs: {
+      label: {
+        text: `${item.nodeName}`
+      }
+    },
     data: initNodeData(item.serviceType)
   })
 }
