@@ -13,10 +13,10 @@ export default {
     }
   ],
   attrs: {
-    body: {
+    circle: {
       fill: commonStyele.body.fill,
       stroke: commonStyele.body.stroke,
-      strokeWidth: commonStyele.body.stroke
+      strokeWidth: commonStyele.body.strokeWidth
     },
     label: {
       fontSize: commonStyele.label.fontSize,

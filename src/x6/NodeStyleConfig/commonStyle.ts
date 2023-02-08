@@ -1,7 +1,7 @@
 export const commonStyele = {
   body: {
     fill: '#fff',
-    stroke: '#000',
+    stroke: '#1a1a1a',
     strokeWidth: 1
   },
   label: {

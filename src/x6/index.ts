@@ -14,7 +14,7 @@ const initEdge = (graph:any) => {
       inherit: 'edge',
       attrs: {
         line: {
-          stroke: '#A2B1C3',
+          stroke: 'red',
           strokeWidth: 2
         }
       }
@@ -49,13 +49,13 @@ export const initX6 = (Dom: HTMLDivElement) => {
     },
 
     connecting: {
-      router: 'orth',
-      // router: {
-      //   name: 'orth',
-      //   args: {
-      //     padding: 1
-      //   }
-      // },
+      // router: 'orth',
+      router: {
+        name: 'er',
+        args: {
+          padding: 5
+        }
+      },
       // connector: {
       //   name: 'rounded',
       //   args: {
@@ -79,11 +79,12 @@ export const initX6 = (Dom: HTMLDivElement) => {
       // 初始化了边
       createEdge () {
         return new Shape.Edge({
+          // router: { name: 'orth' },
+          // connector: { name: 'rounded' },
           attrs: {
             line: {
-              stroke: '#ddd',
-              strokeWidth: 2, // 线宽
-              // 箭头
+              stroke: '#5e5e5e',
+              strokeWidth: 2,
               targetMarker: {
                 name: 'block',
                 width: 12,
@@ -112,34 +113,10 @@ export const initX6 = (Dom: HTMLDivElement) => {
       }
     }
   })
-  // initEdge(graph)
   nodeTooLArr = initNodeDefaultOptions(data, graph)
-  initEvent(Dom)
+  return graph
 }
-const showPorts = (ports: NodeListOf<SVGElement>, show: boolean) => {
-  for (let i = 0, len = ports.length; i < len; i = i + 1) {
-    ports[i].style.visibility = show ? 'visible' : 'hidden'
-  }
-}
-// 初始化事件 节点的鼠标的移入移出
-export const initEvent = (Dom: HTMLDivElement) => {
-  graph.on('node:mouseenter', () => {
-    const ports = Dom.querySelectorAll(
-      '.x6-port-body'
-    ) as NodeListOf<SVGElement>
-    showPorts(ports, true)
-  })
-  graph.on('node:mouseleave', () => {
-    const ports = Dom.querySelectorAll(
-      '.x6-port-body'
-    ) as NodeListOf<SVGElement>
-    showPorts(ports, false)
-  })
-  graph.on('node:click', ({ node }) => {
-    console.log('节点被点击')
-    console.log(node.getData(), '====node')
-  })
-}
+
 // 初始化左侧工具栏可拖拽的节点 根据 节点列表取注册
 export const initStencil = (Dom: HTMLDivElement) => {
   const stencil = new Stencil({
@@ -161,6 +138,5 @@ export const initStencil = (Dom: HTMLDivElement) => {
     }
   })
   Dom.appendChild(stencil.container)
-
   stencil.load(nodeTooLArr, 'group1')
 }

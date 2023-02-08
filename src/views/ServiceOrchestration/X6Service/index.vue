@@ -1,11 +1,27 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { initX6, initStencil } from '@/x6/index'
+import { initEvent, bus } from '@/x6/InitEvent'
+import { Graph } from '@antv/x6'
+import NodeOperde from '../NodeOperate/index.vue'
 const graphcontainer = ref()
 const stencil = ref()
+const nodeOperdeDom = ref()
+// 打开抽屉
+const open = (node:any) => {
+  nodeOperdeDom.value.openDrawer(node)
+}
+
+let graph:Graph
 onMounted(() => {
-  initX6(graphcontainer.value)
+  graph = initX6(graphcontainer.value)
   initStencil(stencil.value)
+  initEvent(graph, graphcontainer.value)
+})
+
+bus.on('node:click', (cell:any) => {
+  const { node } = cell
+  open(node)
 })
 </script>
 
@@ -13,6 +29,7 @@ onMounted(() => {
 <div style="display: flex;">
   <div  style="width: 180px;position: relative;border-right: 1px solid #dfe3e8;" ref="stencil"></div>
   <div  style="width: calc(100% - 180px);height: 100%;" ref="graphcontainer"></div>
+  <NodeOperde ref="nodeOperdeDom"/>
 </div>
 </template>
 

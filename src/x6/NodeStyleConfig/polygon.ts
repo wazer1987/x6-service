@@ -16,7 +16,7 @@ export default {
     body: {
       fill: commonStyele.body.fill,
       stroke: commonStyele.body.stroke,
-      strokeWidth: commonStyele.body.stroke,
+      strokeWidth: commonStyele.body.strokeWidth,
       refPoints: '0,10 10,0 20,10 10,20'
     },
     label: {
