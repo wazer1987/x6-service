@@ -53,7 +53,7 @@ export const initX6 = (Dom: HTMLDivElement) => {
       router: {
         name: 'er',
         args: {
-          padding: 5
+          offset: 'center'
         }
       },
       // connector: {
