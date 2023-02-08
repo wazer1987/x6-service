@@ -13,12 +13,12 @@ export default {
     }
   ],
   attrs: {
-    body: {
+    rect: {
       fill: commonStyele.body.fill,
       stroke: commonStyele.body.stroke,
       strokeWidth: commonStyele.body.strokeWidth
     },
-    label: {
+    text: {
       text: '',
       fontSize: commonStyele.label.fontSize,
       fill: commonStyele.label.fill,

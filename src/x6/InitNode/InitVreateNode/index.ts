@@ -21,7 +21,7 @@ export const initCreateNode = (item:NodeListItem, graph:Graph) => {
     shape: `custom-${item.id}-${item.nodeShape}`,
     label: `${item.nodeName}`,
     attrs: {
-      label: {
+      text: {
         text: `${item.nodeName}`
       }
     },

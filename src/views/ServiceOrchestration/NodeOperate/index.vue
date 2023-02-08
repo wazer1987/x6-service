@@ -33,48 +33,28 @@ const save = () => {
   currentNode.value.prop('position', { x: Number(form.position.x), y: Number(form.position.y) })
   currentNode.value.prop('size', { width: Number(form.size.width), height: Number(form.size.height) })
   const obj = toRaw(form.attrs)
-  console.log(obj, '===obj')
-
   currentNode.value.prop('attrs', {
     ...obj,
+    body: {
+      fill: obj[shapeFlag.value].fill,
+      stroke: obj[shapeFlag.value].stroke,
+      strokeWidth: obj[shapeFlag.value].strokeWidth
+    },
+    rect: {
+      fill: obj[shapeFlag.value].fill,
+      stroke: obj[shapeFlag.value].stroke,
+      strokeWidth: obj[shapeFlag.value].strokeWidth
+    },
     label: {
       ...obj.label,
-      text: obj.label.text
+      text: obj.text.text
     },
-    body: {
-      fill: obj.body.fill,
-      stroke: obj.body.stroke,
-      strokeWidth: obj.body.strokeWidth
+    text: {
+      ...obj.text,
+      text: obj.text.text
     }
+
   })
-  // console.log(form.attrs.body.fill, 'form.attrs.body.fill')
-  // currentNode.value.attr('rect/fill', form.attrs.body.fill)
-  // currentNode.value.attr('text/text', form.attrs.label.text)
-
-  // currentNode.value.prop('attrs', {
-  //   // text: {
-  //   //   text: form.attrs.text.text
-  //   // }
-  //   // [shapeFlag.value]: { ...form.attrs[shapeFlag.value] }
-  // })
-  // for (const key in config) {
-  //   if (key === 'position') {
-  //     // currentNode.value.prop('position', { x: Number(form.position.x), y: Number(form.position.y) })
-  //     currentNode.value.prop(key, { x: Number(form.position.x), y: Number(form.position.y) })
-  //   } else if (key === 'size') {
-  //     currentNode.value.prop(key, { width: Number(form.size.width), height: Number(form.size.height) })
-  //   } else if (key === 'attrs') {
-  //     const { text } = form[key]
-  //     console.log(form[key])
-  //     const obj = {
-  //       text: form[key].text,
-  //       [shapeFlag.value]: form[key][shapeFlag.value]
-  //     }
-  //     console.log(obj, '===obj')
-
-  //     currentNode.value.prop(key, obj)
-  //   }
-  // }
 }
 
 const openDrawer = (node:any) => {
@@ -84,9 +64,7 @@ const openDrawer = (node:any) => {
 
   const shapeArr = config.shape.split('-')
   shapeFlag.value = shapeArr[shapeArr.length - 1]
-  for (const key in config) {
-    form[key] = config[key]
-  }
+  Object.assign(form, config)
   console.log(form, '==form')
 
   activeName.value = 'nodeConfig'
@@ -112,16 +90,16 @@ defineExpose({
             <el-input v-model="form.size.height" />
           </el-form-item>
           <el-form-item label="节点背景色:">
-            <el-input v-model="form.attrs.body.fill" />
+            <el-input v-model="form.attrs[shapeFlag].fill" />
           </el-form-item>
           <el-form-item label="节点名称:">
-            <el-input v-model="form.attrs.label.text" />
+            <el-input v-model="form.attrs.text.text" />
           </el-form-item>
           <el-form-item label="节点边框颜色:">
-            <el-input v-model="form.attrs.body.stroke" />
+            <el-input v-model="form.attrs[shapeFlag].stroke" />
           </el-form-item>
           <el-form-item label="节点边框粗细:">
-            <el-input v-model="form.attrs.body.strokeWidth" />
+            <el-input v-model="form.attrs[shapeFlag].strokeWidth" />
           </el-form-item>
           <el-form-item label="节点x坐标:">
             <el-input v-model="form.position.x" />
