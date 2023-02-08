@@ -109,6 +109,7 @@ const nodeDefaultConfig = {
 // 初始化 节点的默认选项
 export const initNodeDefaultOptions = (data:any, graph:Graph) => {
   const nodeArray:any = []
+
   data.forEach((item:NodeListItem) => {
     nodeDefaultConfig[item.nodeShape](item.nodeShape)
     // 注册节点的方法

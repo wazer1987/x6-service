@@ -8,8 +8,8 @@ const graphcontainer = ref()
 const stencil = ref()
 const nodeOperdeDom = ref()
 // 打开抽屉
-const open = (node:any) => {
-  nodeOperdeDom.value.openDrawer(node)
+const open = (node:any, graph:Graph) => {
+  nodeOperdeDom.value.openDrawer(node, graph)
 }
 
 let graph:Graph
@@ -21,7 +21,7 @@ onMounted(() => {
 
 bus.on('node:click', (cell:any) => {
   const { node } = cell
-  open(node)
+  open(node, graph)
 })
 </script>
 

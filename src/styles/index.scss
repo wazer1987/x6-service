@@ -11,3 +11,10 @@ p{word-wrap:break-word}
 @import './table.scss';
 
 @import './page.scss';
+
+.drawer{
+  .el-drawer__body{
+    padding: 0 !important;
+    height: calc(100vh - 42px);
+  }
+}
