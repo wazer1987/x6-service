@@ -103,8 +103,12 @@ const openDrawer = (node:any, graph:Graph) => {
 const exportData = () => {
   console.log('导出')
   console.log(graphcanvas.toJSON())
+  localStorage.setItem('JSONDATA', JSON.stringify(graphcanvas.toJSON()))
 }
 const importData = () => {
+  const data = JSON.parse(localStorage.getItem('JSONDATA') as string)
+  console.log(data)
+  graphcanvas.fromJSON(data.cells)
   console.log('导入')
 }
 const downImg = () => {
