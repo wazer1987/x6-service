@@ -1,4 +1,5 @@
 import { Graph } from '@antv/x6'
+import { commonStyele } from '../NodeStyleConfig/commonStyle'
 
 import mitt from 'mitt'
 export const bus = mitt()
@@ -18,6 +19,8 @@ const enventList = {
       '.x6-port-body'
     ) as NodeListOf<SVGElement>
     showPorts(ports, true)
+    const { node } = cell
+    node.addTools(commonStyele.tools[0])
     bus.emit(key, cell)
   },
   'node:mouseleave': (key:string, cell:any, Dom:HTMLElement) => {
@@ -25,12 +28,25 @@ const enventList = {
       '.x6-port-body'
     ) as NodeListOf<SVGElement>
     showPorts(ports, false)
+    const { node } = cell
+    node.removeTools()
     bus.emit(key, cell)
   },
   'edge:click': (key:string, cell:any, Dom:HTMLElement) => {
     bus.emit(key, cell)
   }
 }
+
+// tools: [
+//   {
+//     name: 'button-remove',
+//     args: {
+//       x: '100%',
+//       y: 0,
+//       offset: { x: 10, y: 0 }
+//     }
+//   }
+// ]
 
 export const initEvent = (graph:Graph, Dom:HTMLElement) => {
   for (const key in enventList) {

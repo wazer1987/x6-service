@@ -12,6 +12,7 @@ export default {
       selector: 'label'
     }
   ],
+  // tools: commonStyele.tools,
   attrs: {
     circle: {
       fill: commonStyele.body.fill,
