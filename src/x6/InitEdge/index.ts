@@ -64,7 +64,7 @@ export const initEdge = () => {
         }
       },
       data: {
-        name: ''
+        expression: ''
       }
     },
     true

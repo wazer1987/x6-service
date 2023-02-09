@@ -95,22 +95,37 @@ const edgeForm = reactive({
   target: '',
   attrs: {}
 })
+
 const edgeOpenDrawer = (edge:any, graph:Graph, nodeOrEdge:string) => {
   isNodeOrEdge.value = nodeOrEdge
   currentEdge.value = edge
+  graphcanvas = graph
+  // 渲染边的样式表单
   const config = edge.prop()
   Object.assign(edgeForm, config)
-  console.log(edgeForm, '====prop')
-  // edge.setLabels('aaaaaaaaa')
-  // console.log(edge.getLabels())
+  // 渲染 表达式的表单
+  if (edge.getLabels().length) {
+    edgeServiceConfig.lables = edge.getLabels()[0].attrs.label.text
+  }
 
   activeName.value = 'edgeConfig'
   drawer.value = true
 }
+// 保存边的样式
 const saveEdge = () => {
   currentEdge.value.attr('line/stroke', edgeForm.attrs.line.stroke)
   currentEdge.value.attr('line/strokeWidth', Number(edgeForm.attrs.line.strokeWidth))
   const attrs = currentEdge.value.getAttrs()
+}
+// 保存表达式
+// 表达式表单
+const edgeServiceConfig = reactive({
+  lables: ''
+})
+const saveEdgeService = () => {
+  console.log('保存')
+  currentEdge.value.setLabels(edgeServiceConfig.lables)
+  currentEdge.value.setData({ expression: edgeServiceConfig.lables })
 }
 // 导出设置
 const exportData = () => {
@@ -128,6 +143,49 @@ const downImg = () => {
   console.log('图片')
 }
 
+const NodeId = reactive({
+  id: ''
+})
+
+const path:any = []
+const tinkTraceDeep = (id:string) => {
+  const cell = graphcanvas.getCellById(id)
+  path.push(cell)
+  const allEdge = graphcanvas.getEdges()
+  allEdge.forEach(item => {
+    if (item.target.cell === id) {
+      path.push(item)
+      tinkTraceDeep(item.source.cell)
+    }
+  })
+}
+const tinkTrace = (id:string) => {
+  tinkTraceDeep(NodeId.id)
+  path.forEach((item) => {
+    if (item.shape === 'custom-edge') {
+      item.attr('line/stroke', '#1890ff')
+      item.attr('line/strokeDasharray', 5)
+      item.attr('line/targetMarker', 'classic')
+      item.attr('line/style/animation', 'ant-line 30s infinite linear')
+    } else {
+      item.attr('body/stroke', '#1890ff')
+    }
+  })
+
+  // const cell = graphcanvas.getCellById(NodeId.id)
+  // console.log(cell)
+  //
+  // path.push(cell)
+  // console.log('获取所有连线=>', graphcanvas.getEdges())
+  // const allEdge = graphcanvas.getEdges()
+  // allEdge.forEach(item => {
+  //   if (item.target.cell === NodeId.id) {
+  //     path.push(item)
+  //     tinkTrace(item.source.cell)
+  //   }
+  // })
+  // console.log('链路跟踪')
+}
 defineExpose({
   openDrawer,
   edgeOpenDrawer
@@ -171,6 +229,16 @@ defineExpose({
           </el-form-item>
         </el-form>
       </el-tab-pane>
+      <el-tab-pane v-if="isNodeOrEdge === 'node'" name="serviceConfig" label="服务编排设置">
+        <el-form :model="serviceForm" label-position="left" label-width="100px">
+          <el-form-item v-for="item in servicePropList" :key="item.prop" :label="item.name+ ':'">
+            <el-input  v-model="serviceForm[item.prop]" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary"  :icon="Check" @click="saveServieData">保存</el-button>
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
       <el-tab-pane v-if="isNodeOrEdge === 'edge'" name="edgeConfig" label="连线设置">
         <el-form :model="edgeForm" label-position="left" label-width="100px">
           <el-form-item  label="连线id:">
@@ -193,13 +261,13 @@ defineExpose({
           </el-form-item>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane name="serviceConfig" label="服务编排设置">
-        <el-form :model="serviceForm" label-position="left" label-width="100px">
-          <el-form-item v-for="item in servicePropList" :key="item.prop" :label="item.name+ ':'">
-            <el-input  v-model="serviceForm[item.prop]" />
+      <el-tab-pane v-if="isNodeOrEdge === 'edge'" name="edgeServiceConfig" label="表达式设置">
+        <el-form :model="edgeServiceForm" label-position="left" label-width="100px">
+          <el-form-item  label="输入表达式值:">
+            <el-input  v-model="edgeServiceConfig.lables" />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary"  :icon="Check" @click="saveServieData">保存</el-button>
+            <el-button type="primary"  :icon="Check" @click="saveEdgeService">保存</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -207,6 +275,8 @@ defineExpose({
         <el-button @click="exportData">导出数据</el-button>
         <el-button @click="importData">导入数据</el-button>
         <el-button @click="downImg">生成图片</el-button>
+        <el-button @click="tinkTrace">链路跟踪</el-button>
+        <el-input style="margin-top:20px;" v-model="NodeId.id" />
       </el-tab-pane>
     </el-tabs>
   </el-drawer>
