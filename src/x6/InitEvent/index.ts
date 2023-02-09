@@ -26,6 +26,9 @@ const enventList = {
     ) as NodeListOf<SVGElement>
     showPorts(ports, false)
     bus.emit(key, cell)
+  },
+  'edge:click': (key:string, cell:any, Dom:HTMLElement) => {
+    bus.emit(key, cell)
   }
 }
 

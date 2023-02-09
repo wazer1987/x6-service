@@ -14,6 +14,7 @@ const ports = {
       attrs: {
         circle: {
           r: 4,
+          // 控制连接装是否能拖出来线
           magnet: true,
           stroke: '#000',
           strokeWidth: 1,

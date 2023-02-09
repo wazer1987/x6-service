@@ -18,3 +18,10 @@ p{word-wrap:break-word}
     height: calc(100vh - 42px);
   }
 }
+
+
+@keyframes ant-line {
+  to {
+      stroke-dashoffset: -1000
+  }
+}

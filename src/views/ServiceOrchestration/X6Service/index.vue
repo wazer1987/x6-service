@@ -7,11 +7,14 @@ import NodeOperde from '../NodeOperate/index.vue'
 const graphcontainer = ref()
 const stencil = ref()
 const nodeOperdeDom = ref()
-// 打开抽屉
-const open = (node:any, graph:Graph) => {
-  nodeOperdeDom.value.openDrawer(node, graph)
+// 点击节点的时候打开抽屉
+const open = (node:any, graph:Graph, nodeOredge:string) => {
+  nodeOperdeDom.value.openDrawer(node, graph, nodeOredge)
 }
-
+// 点击边的时候 打开抽屉
+const edgeOpen = (edge:any, graph:Graph, nodeOredge:string) => {
+  nodeOperdeDom.value.edgeOpenDrawer(edge, graph, nodeOredge)
+}
 let graph:Graph
 onMounted(() => {
   graph = initX6(graphcontainer.value)
@@ -21,7 +24,14 @@ onMounted(() => {
 
 bus.on('node:click', (cell:any) => {
   const { node } = cell
-  open(node, graph)
+  open(node, graph, 'node')
+})
+
+bus.on('edge:click', (cell:any) => {
+  console.log('点击了边')
+
+  const { edge } = cell
+  edgeOpen(edge, graph, 'edge')
 })
 </script>
 

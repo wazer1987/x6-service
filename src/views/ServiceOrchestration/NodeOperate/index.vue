@@ -4,6 +4,8 @@ import { nextTick, reactive, ref, toRaw } from 'vue'
 import { Check } from '@element-plus/icons-vue'
 import { Graph } from '@antv/x6'
 const drawer = ref(false)
+const isNodeOrEdge = ref('')
+
 const activeName = ref('nodeConfig')
 // 当前点击的节点实例
 const currentNode = ref(null)
@@ -16,23 +18,6 @@ const form = reactive({
   attrs: {},
   id: ''
 })
-
-const config = {
-  angle: 0,
-  position: {
-
-  },
-  size: {
-
-  },
-  attrs: {
-
-  },
-  visible: true,
-  shape: '',
-  id: '',
-  zIndex: 1
-}
 
 // 节点的业务数据
 const servicePropList = ref([])
@@ -73,8 +58,9 @@ const saveServieData = () => {
   currentNode.value.setData(serviceForm.value)
 }
 
-// 初始化 抽屉操作
-const openDrawer = (node:any, graph:Graph) => {
+// 点击节点初始化 抽屉操作
+const openDrawer = (node:any, graph:Graph, nodeOrEdge:string) => {
+  isNodeOrEdge.value = nodeOrEdge
   // 当前点击的节点
   currentNode.value = node
   graphcanvas = graph
@@ -86,7 +72,6 @@ const openDrawer = (node:any, graph:Graph) => {
   Object.assign(form, config)
 
   // 拿到业务数据
-  console.log(node.getData(), '===data')
 
   const { serviceProp } = node.getData()
   servicePropList.value = serviceProp
@@ -98,7 +83,35 @@ const openDrawer = (node:any, graph:Graph) => {
   activeName.value = 'nodeConfig'
   drawer.value = true
 }
+// 点击的边线实例
+const currentEdge = ref(null)
+// 边线的表单
+const edgeForm = reactive({
+  id: '',
+  data: '',
+  defaultLabel: {},
+  shape: '',
+  source: '',
+  target: '',
+  attrs: {}
+})
+const edgeOpenDrawer = (edge:any, graph:Graph, nodeOrEdge:string) => {
+  isNodeOrEdge.value = nodeOrEdge
+  currentEdge.value = edge
+  const config = edge.prop()
+  Object.assign(edgeForm, config)
+  console.log(edgeForm, '====prop')
+  // edge.setLabels('aaaaaaaaa')
+  // console.log(edge.getLabels())
 
+  activeName.value = 'edgeConfig'
+  drawer.value = true
+}
+const saveEdge = () => {
+  currentEdge.value.attr('line/stroke', edgeForm.attrs.line.stroke)
+  currentEdge.value.attr('line/strokeWidth', Number(edgeForm.attrs.line.strokeWidth))
+  const attrs = currentEdge.value.getAttrs()
+}
 // 导出设置
 const exportData = () => {
   console.log('导出')
@@ -116,14 +129,15 @@ const downImg = () => {
 }
 
 defineExpose({
-  openDrawer
+  openDrawer,
+  edgeOpenDrawer
 })
 </script>
 
 <template>
   <el-drawer class="drawer" v-model="drawer" title="服务编排操作">
     <el-tabs type="border-card" v-model="activeName">
-      <el-tab-pane name="nodeConfig" label="节点设置">
+      <el-tab-pane v-if="isNodeOrEdge === 'node'" name="nodeConfig" label="节点设置">
         <el-form :model="form" label-position="left" label-width="100px">
           <el-form-item  label="节点id:">
             <el-input disabled v-model="form.id" />
@@ -157,7 +171,28 @@ defineExpose({
           </el-form-item>
         </el-form>
       </el-tab-pane>
-      <!-- <el-tab-pane name="edgeConfig" label="连线设置">edgeConfig</el-tab-pane> -->
+      <el-tab-pane v-if="isNodeOrEdge === 'edge'" name="edgeConfig" label="连线设置">
+        <el-form :model="edgeForm" label-position="left" label-width="100px">
+          <el-form-item  label="连线id:">
+            <el-input disabled v-model="edgeForm.id" />
+          </el-form-item>
+          <el-form-item  label="起始节点id:">
+            <el-input disabled v-model="edgeForm.source.cell" />
+          </el-form-item>
+          <el-form-item  label="目标节点id:">
+            <el-input disabled v-model="edgeForm.target.cell" />
+          </el-form-item>
+          <el-form-item  label="连线颜色:">
+            <el-input  v-model="edgeForm.attrs.line.stroke" />
+          </el-form-item>
+          <el-form-item  label="连线宽度:">
+            <el-input  v-model="edgeForm.attrs.line.strokeWidth" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary"  :icon="Check" @click="saveEdge">保存</el-button>
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
       <el-tab-pane name="serviceConfig" label="服务编排设置">
         <el-form :model="serviceForm" label-position="left" label-width="100px">
           <el-form-item v-for="item in servicePropList" :key="item.prop" :label="item.name+ ':'">

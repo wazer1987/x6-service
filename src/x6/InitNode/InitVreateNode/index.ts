@@ -20,8 +20,6 @@ const getServicePropList = getServicePropItem()
 // }
 // 左侧添加节点图形
 export const initCreateNode = (item:NodeListItem, graph:Graph) => {
-  console.log()
-
   return graph.createNode({
     shape: `custom-${item.id}-${item.nodeShape}`,
     label: `${item.nodeName}`,

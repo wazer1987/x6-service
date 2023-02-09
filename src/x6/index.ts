@@ -2,29 +2,12 @@
 import { getConfigList } from '@/utils'
 import { Graph, Shape } from '@antv/x6'
 import { Stencil } from '@antv/x6-plugin-stencil'
+import { initEdge } from './InitEdge'
 import { initNodeDefaultOptions } from './InitNode/index'
 let graph: Graph
 let data :any
 let nodeTooLArr:any = []
 
-const initEdge = (graph:any) => {
-  Graph.registerEdge(
-    'bpmn-edge',
-    {
-      inherit: 'edge',
-      attrs: {
-        line: {
-          stroke: 'red',
-          strokeWidth: 2
-        }
-      }
-    },
-    true
-  )
-  graph.createEdge({
-    shape: 'bpmn-edge'
-  })
-}
 export const initX6 = (Dom: HTMLDivElement) => {
   data = getConfigList()
   graph = new Graph({
@@ -49,19 +32,21 @@ export const initX6 = (Dom: HTMLDivElement) => {
     },
 
     connecting: {
-      // router: 'orth',
+      // 如果你的边有拐点的话 那么他会让每一条边尽量保持垂直或者水平
       router: {
         name: 'er',
         args: {
-          offset: 'center'
+          offset: 40
         }
       },
-      // connector: {
-      //   name: 'rounded',
-      //   args: {
-      //     radius: 8
-      //   }
-      // },
+      // 线的转角 原话程度
+      connector: {
+        name: 'rounded',
+        args: {
+          radius: 8
+        }
+      },
+      // 设置锚点 连线的时候需要一个基准点
       anchor: 'center',
       // connectionPoint: 'anchor',
       // 起始和终止只允许创建一条边
@@ -74,31 +59,18 @@ export const initX6 = (Dom: HTMLDivElement) => {
       allowPort: true,
       // 碰到链接庄的时候 自动吸附
       snap: {
-        radius: 20
+        radius: 10
       },
       // 初始化了边
       createEdge () {
-        return new Shape.Edge({
-          // router: { name: 'orth' },
-          // connector: { name: 'rounded' },
-          attrs: {
-            line: {
-              stroke: '#5e5e5e',
-              strokeWidth: 2,
-              targetMarker: {
-                name: 'block',
-                width: 12,
-                height: 8
-              }
-            }
-          },
-          zIndex: 0
+        return this.createEdge({
+          shape: 'custom-edge'
         })
-      },
-      // 判断连链接是否有效
-      validateConnection ({ targetMagnet }) {
-        return !!targetMagnet
       }
+      // 判断连链接是否有效
+      // validateConnection ({ targetMagnet }) {
+      //   return !!targetMagnet
+      // }
     },
     // 连线的时候高亮 链接庄的
     highlighting: {
@@ -113,7 +85,10 @@ export const initX6 = (Dom: HTMLDivElement) => {
       }
     }
   })
+  // 初始化节点 注册节点 创建节点
   nodeTooLArr = initNodeDefaultOptions(data, graph)
+  // 初始化边
+  initEdge()
   return graph
 }
 
