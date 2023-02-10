@@ -20,7 +20,7 @@ const enventList = {
     ) as NodeListOf<SVGElement>
     showPorts(ports, true)
     const { node } = cell
-    node.addTools(commonStyele.tools[0])
+    // node.addTools(commonStyele.tools[0])
     bus.emit(key, cell)
   },
   'node:mouseleave': (key:string, cell:any, Dom:HTMLElement) => {
@@ -29,7 +29,7 @@ const enventList = {
     ) as NodeListOf<SVGElement>
     showPorts(ports, false)
     const { node } = cell
-    node.removeTools()
+    // node.removeTools()
     bus.emit(key, cell)
   },
   'edge:click': (key:string, cell:any, Dom:HTMLElement) => {

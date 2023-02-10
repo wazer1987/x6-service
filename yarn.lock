@@ -37,6 +37,18 @@
   resolved "https://registry.npmmirror.com/@antv/x6-plugin-dnd/-/x6-plugin-dnd-2.0.4.tgz#4358f424526731727d7392eddafad5018116cdfc"
   integrity sha512-DOT6/chhW67vD7+XXsvHs0ch01uqxyE7kbdrojgAsKftYmjXR+IveiXP7hzV0ObJ3k3V17xd3887f40S0Naxbg==
 
+"@antv/x6-plugin-keyboard@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.npmmirror.com/@antv/x6-plugin-keyboard/-/x6-plugin-keyboard-2.2.0.tgz#6c988dce8d599a59a6a84edef7707abd5928e97f"
+  integrity sha512-5DDBGavVBtApTZp3tRJxwhlVKNLLhSPwhbDOUABfFkQ+7aw6/ubQl9mh53tZ+uarIwwzZsnzHJZ6z1jQTSixAQ==
+  dependencies:
+    mousetrap "^1.6.5"
+
+"@antv/x6-plugin-selection@^2.1.5":
+  version "2.1.5"
+  resolved "https://registry.npmmirror.com/@antv/x6-plugin-selection/-/x6-plugin-selection-2.1.5.tgz#4b140519d88f336d5ea5abe46a78df2e62ee926c"
+  integrity sha512-Stxjw1WENURpgV4RAGnXW14q58X/ojxpAa3BIL1s2pVPn/xJWXgYzxg5YhiP+z+oJiqtWFTm4vk6S18aRCNOfg==
+
 "@antv/x6-plugin-stencil@^2.0.0":
   version "2.0.2"
   resolved "https://registry.npmmirror.com/@antv/x6-plugin-stencil/-/x6-plugin-stencil-2.0.2.tgz#9cca15a122f921dca615f1bd98431057e469c988"
@@ -4008,6 +4020,11 @@ module-alias@^2.2.2:
   version "2.2.2"
   resolved "https://registry.npmmirror.com/module-alias/-/module-alias-2.2.2.tgz#151cdcecc24e25739ff0aa6e51e1c5716974c0e0"
   integrity sha512-A/78XjoX2EmNvppVWEhM2oGk3x4lLxnkEA4jTbaK97QKSDjkIoOsKQlfylt/d3kKKi596Qy3NP5XrXJ6fZIC9Q==
+
+mousetrap@^1.6.5:
+  version "1.6.5"
+  resolved "https://registry.npmmirror.com/mousetrap/-/mousetrap-1.6.5.tgz#8a766d8c272b08393d5f56074e0b5ec183485bf9"
+  integrity sha512-QNo4kEepaIBwiT8CDhP98umTetp+JNfQYBWvC1pc6/OAibuXtRcxZ58Qz8skvEHYvURne/7R8T5VoOI7rDsEUA==
 
 mrmime@^1.0.0:
   version "1.0.1"

@@ -86,7 +86,7 @@ const value = computed({
       </el-col>
     </el-row>
     <el-divider content-position="left">方法入参</el-divider>
-    <el-row :gutter="24" v-for="(item,index) in states.props" :key="item.prop" class="mb">
+    <el-row :gutter="24" v-for="(item,index) in states.props" :key="index" class="mb">
       <el-col :span="1">
         <el-button @click="add" v-if="index === 0" type="primary" :icon="Plus" circle />
         <el-button  v-else @click="del(index)" type="danger" :icon="SemiSelect" circle />
