@@ -11,7 +11,9 @@ export const pluginsConfig = {
       enabled: true,
       rubberband: true,
       showNodeSelectionBox: true,
-      pointerEvents: 'none'
+      pointerEvents: 'none',
+      className: 'x6-node-selected-aa',
+      content: 'sss'
     }))
   }
 }
