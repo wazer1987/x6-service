@@ -171,20 +171,6 @@ const tinkTrace = (id:string) => {
       item.attr('body/stroke', '#1890ff')
     }
   })
-
-  // const cell = graphcanvas.getCellById(NodeId.id)
-  // console.log(cell)
-  //
-  // path.push(cell)
-  // console.log('获取所有连线=>', graphcanvas.getEdges())
-  // const allEdge = graphcanvas.getEdges()
-  // allEdge.forEach(item => {
-  //   if (item.target.cell === NodeId.id) {
-  //     path.push(item)
-  //     tinkTrace(item.source.cell)
-  //   }
-  // })
-  // console.log('链路跟踪')
 }
 defineExpose({
   openDrawer,

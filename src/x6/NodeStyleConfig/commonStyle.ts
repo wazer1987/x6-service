@@ -44,7 +44,7 @@ export const commonStyele = {
         ],
         x: '100%',
         y: 0,
-        offset: { x: 8, y: -8 }
+        offset: { x: 0, y: -4 }
       }
     }
   ]
