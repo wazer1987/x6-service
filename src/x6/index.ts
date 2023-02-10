@@ -48,6 +48,8 @@ export const initX6 = (Dom: HTMLDivElement) => {
       },
       // 设置锚点 连线的时候需要一个基准点
       anchor: 'center',
+      // 是否允许循环连线  起始点和终点相互连线
+      allowLoop: false,
       // connectionPoint: 'anchor',
       // 起始和终止只允许创建一条边
       allowMulti: false,
