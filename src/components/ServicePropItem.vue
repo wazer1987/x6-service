@@ -80,11 +80,12 @@ const value = computed({
   <el-form  label-position="left">
     <el-row :gutter="24" class="mb">
       <el-col >
-        <el-form-item label="属性名称:" prop="serviceName">
+        <el-form-item label="Bean名称:" prop="serviceName">
           <el-input :modelValue="value"   @update:modelValue="newValue => value = newValue"/>
         </el-form-item>
       </el-col>
     </el-row>
+    <el-divider content-position="left">方法入参</el-divider>
     <el-row :gutter="24" v-for="(item,index) in states.props" :key="item.prop" class="mb">
       <el-col :span="1">
         <el-button @click="add" v-if="index === 0" type="primary" :icon="Plus" circle />

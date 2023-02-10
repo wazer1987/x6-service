@@ -1,7 +1,5 @@
-import { getConfigList, getServicePropItem } from '@/utils'
 import { Graph } from '@antv/x6'
 import { NodeListItem } from '../../CodeTypeConfig/index'
-const getServicePropList = getServicePropItem()
 
 // const initNodeData = (key:string) => {
 //   const arr = getServicePropList[key]
@@ -29,7 +27,7 @@ export const initCreateNode = (item:NodeListItem, graph:Graph) => {
       }
     },
     data: {
-      serviceProp: getServicePropList[item.serviceType]
+      serviceProp: item.serviceType
     }
   })
 }

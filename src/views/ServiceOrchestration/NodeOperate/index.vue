@@ -1,15 +1,17 @@
 <!-- eslint-disable no-undef -->
 <script setup lang="ts">
 import { nextTick, reactive, ref, toRaw } from 'vue'
+import { getServicePropItem, getItem, SERVICE_KEY } from '@/utils'
 import { Check } from '@element-plus/icons-vue'
 import { Graph } from '@antv/x6'
+const getServicePropList = getServicePropItem()
 const drawer = ref(false)
 const isNodeOrEdge = ref('')
 
 const activeName = ref('nodeConfig')
 // 当前点击的节点实例
 const currentNode = ref(null)
-let graphcanvas:Graph
+let graphcanvas: Graph
 // 节点的样式表
 const shapeFlag = ref('')
 const form = reactive({
@@ -58,8 +60,10 @@ const saveServieData = () => {
   currentNode.value.setData(serviceForm.value)
 }
 
+const serviceListItem = ref({})
+
 // 点击节点初始化 抽屉操作
-const openDrawer = (node:any, graph:Graph, nodeOrEdge:string) => {
+const openDrawer = (node: any, graph: Graph, nodeOrEdge: string) => {
   isNodeOrEdge.value = nodeOrEdge
   // 当前点击的节点
   currentNode.value = node
@@ -74,7 +78,12 @@ const openDrawer = (node:any, graph:Graph, nodeOrEdge:string) => {
   // 拿到业务数据
 
   const { serviceProp } = node.getData()
-  servicePropList.value = serviceProp
+
+  // 拿到表单的服务类型和斌方法
+  const serviceList = getItem(SERVICE_KEY)
+  serviceListItem.value = serviceList.find(item => item.serviceProp === serviceProp)
+
+  servicePropList.value = getServicePropList[serviceProp]
   // 初始化默认值
   servicePropList.value.forEach(item => {
     serviceForm.value[item.prop] = item.value
@@ -96,7 +105,7 @@ const edgeForm = reactive({
   attrs: {}
 })
 
-const edgeOpenDrawer = (edge:any, graph:Graph, nodeOrEdge:string) => {
+const edgeOpenDrawer = (edge: any, graph: Graph, nodeOrEdge: string) => {
   isNodeOrEdge.value = nodeOrEdge
   currentEdge.value = edge
   graphcanvas = graph
@@ -147,8 +156,8 @@ const NodeId = reactive({
   id: ''
 })
 
-const path:any = []
-const tinkTraceDeep = (id:string) => {
+const path: any = []
+const tinkTraceDeep = (id: string) => {
   const cell = graphcanvas.getCellById(id)
   path.push(cell)
   const allEdge = graphcanvas.getEdges()
@@ -159,7 +168,7 @@ const tinkTraceDeep = (id:string) => {
     }
   })
 }
-const tinkTrace = (id:string) => {
+const tinkTrace = (id: string) => {
   tinkTraceDeep(NodeId.id)
   path.forEach((item) => {
     if (item.shape === 'custom-edge') {
@@ -183,7 +192,7 @@ defineExpose({
     <el-tabs type="border-card" v-model="activeName">
       <el-tab-pane v-if="isNodeOrEdge === 'node'" name="nodeConfig" label="节点设置">
         <el-form :model="form" label-position="left" label-width="100px">
-          <el-form-item  label="节点id:">
+          <el-form-item label="节点id:">
             <el-input disabled v-model="form.id" />
           </el-form-item>
           <el-form-item label="节点宽度:">
@@ -211,49 +220,58 @@ defineExpose({
             <el-input v-model="form.position.y" />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary"  :icon="Check" @click="save">保存</el-button>
+            <el-button type="primary" :icon="Check" @click="save">保存</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
       <el-tab-pane v-if="isNodeOrEdge === 'node'" name="serviceConfig" label="服务编排设置">
+        <el-form label-position="left" label-width="100px">
+          <el-form-item label="服务类型:">
+            <el-input disabled v-model="serviceListItem.serviceType" />
+          </el-form-item>
+          <el-form-item label="Bean名称:">
+            <el-input disabled v-model="serviceListItem.serviceProp" />
+          </el-form-item>
+        </el-form>
+        <el-divider content-position="left">方法入参</el-divider>
         <el-form :model="serviceForm" label-position="left" label-width="100px">
-          <el-form-item v-for="item in servicePropList" :key="item.prop" :label="item.name+ ':'">
-            <el-input  v-model="serviceForm[item.prop]" />
+          <el-form-item v-for="item in servicePropList" :key="item.prop" :label="item.name + ':'">
+            <el-input v-model="serviceForm[item.prop]" />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary"  :icon="Check" @click="saveServieData">保存</el-button>
+            <el-button type="primary" :icon="Check" @click="saveServieData">保存</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
       <el-tab-pane v-if="isNodeOrEdge === 'edge'" name="edgeConfig" label="连线设置">
         <el-form :model="edgeForm" label-position="left" label-width="100px">
-          <el-form-item  label="连线id:">
+          <el-form-item label="连线id:">
             <el-input disabled v-model="edgeForm.id" />
           </el-form-item>
-          <el-form-item  label="起始节点id:">
+          <el-form-item label="起始节点id:">
             <el-input disabled v-model="edgeForm.source.cell" />
           </el-form-item>
-          <el-form-item  label="目标节点id:">
+          <el-form-item label="目标节点id:">
             <el-input disabled v-model="edgeForm.target.cell" />
           </el-form-item>
-          <el-form-item  label="连线颜色:">
-            <el-input  v-model="edgeForm.attrs.line.stroke" />
+          <el-form-item label="连线颜色:">
+            <el-input v-model="edgeForm.attrs.line.stroke" />
           </el-form-item>
-          <el-form-item  label="连线宽度:">
-            <el-input  v-model="edgeForm.attrs.line.strokeWidth" />
+          <el-form-item label="连线宽度:">
+            <el-input v-model="edgeForm.attrs.line.strokeWidth" />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary"  :icon="Check" @click="saveEdge">保存</el-button>
+            <el-button type="primary" :icon="Check" @click="saveEdge">保存</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
       <el-tab-pane v-if="isNodeOrEdge === 'edge'" name="edgeServiceConfig" label="表达式设置">
         <el-form :model="edgeServiceForm" label-position="left" label-width="100px">
-          <el-form-item  label="输入表达式值:">
-            <el-input  v-model="edgeServiceConfig.lables" />
+          <el-form-item label="输入表达式值:">
+            <el-input v-model="edgeServiceConfig.lables" />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary"  :icon="Check" @click="saveEdgeService">保存</el-button>
+            <el-button type="primary" :icon="Check" @click="saveEdgeService">保存</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -270,6 +288,6 @@ defineExpose({
 
 <style scoped lang="scss">
 .el-tabs {
-  height:  100% !important;
+  height: 100% !important;
 }
 </style>

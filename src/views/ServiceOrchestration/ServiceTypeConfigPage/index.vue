@@ -38,9 +38,7 @@ onMounted(() => {
         </el-table-column>
         <el-table-column label="服务类型"
                          prop="serviceType" />
-        <el-table-column label="服务类型值"
-                         prop="serviceValue" />
-        <el-table-column label="服务属性"
+        <el-table-column label="Bean名称"
                          prop="serviceProp" />
       </el-table>
       <DialogForm ref="dialogRef" @initList="pageFn.init"/>

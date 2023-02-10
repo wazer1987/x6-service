@@ -28,10 +28,7 @@ defineExpose({
     <el-form-item label="服务类型:" prop="serviceType">
       <el-input v-model="form.serviceType" />
     </el-form-item>
-    <el-form-item label="服务类型值:" prop="serviceValue">
-      <el-input v-model="form.serviceValue" />
-    </el-form-item>
-    <el-form-item label="服务属性:" prop="serviceProp">
+    <el-form-item label="Bean名称:" prop="serviceProp">
       <ServicePropItem v-model="form.serviceProp"  v-bind="$attrs"/>
     </el-form-item>
   </el-form>
