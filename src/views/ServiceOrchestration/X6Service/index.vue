@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { initX6, initStencil } from '@/x6/index'
 import { initEvent, bus } from '@/x6/InitEvent'
+import RightMenu from '@/components/RightMenu/index.vue'
 import { Graph } from '@antv/x6'
 import NodeOperde from '../NodeOperate/index.vue'
 const graphcontainer = ref()
@@ -33,13 +34,23 @@ bus.on('edge:click', (cell:any) => {
   const { edge } = cell
   edgeOpen(edge, graph, 'edge')
 })
+
+const rightMenuRef = ref()
+bus.on('node:contextmenu', (cell:any) => {
+  const { x, y } = cell
+  rightMenuRef.value.openRightMenu(x, y)
+})
+bus.on('blank:click', () => {
+  rightMenuRef.value.clearRightMenu()
+})
 </script>
 
 <template>
-<div style="display: flex;">
+<div style="display: flex; position: relative;">
   <div  style="width: 180px;position: relative;border-right: 1px solid #dfe3e8;" ref="stencil"></div>
   <div  style="width: calc(100% - 180px);height: 100%;" ref="graphcontainer"></div>
   <NodeOperde ref="nodeOperdeDom"/>
+  <RightMenu ref="rightMenuRef" />
 </div>
 </template>
 

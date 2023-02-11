@@ -34,6 +34,13 @@ const enventList = {
   },
   'edge:click': (key:string, cell:any, Dom:HTMLElement) => {
     bus.emit(key, cell)
+  },
+  'node:contextmenu': (key:string, cell:any, Dom:HTMLElement) => {
+    console.log('右击了菜单')
+    bus.emit(key, cell)
+  },
+  'blank:click': (key:string, cell:any, Dom:HTMLElement) => {
+    bus.emit(key, cell)
   }
 }
 
