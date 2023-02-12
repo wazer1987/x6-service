@@ -1,25 +1,15 @@
 <!-- eslint-disable no-undef -->
 <template>
-  <ul class="rigthmenu_warp" :style="position">
-    <!-- <li class="menu_item" :key="index" v-for="(item, index) in props.menu" @click="item.clickFn">{{ item.label }}</li> -->
-    <el-dropdown ref="dropdown1" trigger="contextmenu" style="margin-right: 30px">
-      <span>111</span>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item>Action 1</el-dropdown-item>
-          <el-dropdown-item>Action 2</el-dropdown-item>
-          <el-dropdown-item>Action 3</el-dropdown-item>
-          <el-dropdown-item disabled>Action 4</el-dropdown-item>
-          <el-dropdown-item divided>Action 5</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-  </ul>
+  <div class="rigthmenu_warp" :style="position">
+    <MenuItem :menu="props.menu" />
+    <div class="top"></div>
+  </div>
+
 </template>
 
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue'
-
+import MenuItem from './MenuItem.vue'
 // eslint-disable-next-line no-undef
 const props = defineProps({
   menu: {
@@ -29,9 +19,41 @@ const props = defineProps({
         label: '菜单1',
         clickFn: () => {
           console.log('点击了菜单1')
-        }
+        },
+        children: [{
+          label: '菜单1-1',
+          clickFn: () => {
+            console.log('菜单1-1')
+          }
+        }]
       },
-      { label: '菜单2', clickFn: () => { console.log('点击了菜单2') } }
+      {
+        label: '菜单2',
+        clickFn: () => { console.log('点击了菜单2') },
+        children: [{
+          label: '菜单2-1',
+          clickFn: () => {
+            console.log('菜单2-1')
+          },
+          children: [
+            {
+              label: '菜单2-1-1',
+              clickFn: () => {
+                console.log('菜单2-1')
+              },
+              children: [
+                {
+                  label: '菜单2-1-1-1',
+                  clickFn: () => {
+                    console.log('菜单2-1')
+                  }
+                }
+              ]
+            }
+
+          ]
+        }]
+      }
     ]
   }
 })
@@ -49,17 +71,17 @@ const position = computed(() => {
   }
 })
 
-const dropdown1 = ref()
-
 const openRightMenu = (x: number, y: number) => {
   states.x = x
   states.y = y
   states.display = 'block'
-  dropdown1.value.handleOpen()
 }
 const clearRightMenu = () => {
   states.display = 'none'
-  dropdown1.value.handleClose()
+}
+
+const mouseenter = () => {
+  // openRightMenu(300, 200)
 }
 // eslint-disable-next-line no-undef
 defineExpose({
@@ -72,24 +94,15 @@ defineExpose({
 .rigthmenu_warp {
   position: absolute;
   border: 1px solid rgb(149, 149, 149);
-  display: none;
   border-radius: 3px;
-  // overflow: hidden;
   padding: 5px 0;
   background: #fff;
+  z-index: 999;
 
-  .menu_item {
-    text-align: center;
-    height: 20px;
-    width: 80px;
-    line-height: 20px;
-    padding: 5px 3px;
-    cursor: pointer;
-  }
 }
 
-.rigthmenu_warp::after {
-
+.top {
+  z-index: 1;
   position: absolute;
   top: -5px;
   left: 15px;
@@ -98,6 +111,8 @@ defineExpose({
   height: 10px;
   background-color: #fff;
   border: 1px solid rgb(149, 149, 149);
+  border-bottom-color: transparent !important;
+  border-right-color: transparent !important;
   box-sizing: border-box;
   transform: rotate(45deg);
   // clip-path: polygon(0 0, 0% 100%, 100% 50%);
