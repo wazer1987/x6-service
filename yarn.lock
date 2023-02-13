@@ -32,10 +32,20 @@
   resolved "https://registry.npmmirror.com/@antv/x6-geometry/-/x6-geometry-2.0.4.tgz#d08213e200e16c8d065a0235189239cb367a0797"
   integrity sha512-dlsLNRRTiCw8TsJ/03j3y5IbbbK4Npf6zBH6kAx8nnW+edNT/TAOChvPRzizwD+vA7wY9Rp2AiRnp/vCdIYC5w==
 
+"@antv/x6-plugin-clipboard@^2.1.4":
+  version "2.1.4"
+  resolved "https://registry.npmmirror.com/@antv/x6-plugin-clipboard/-/x6-plugin-clipboard-2.1.4.tgz#b4a7a65d7c1addb87ebf09867f30d6b1f583804f"
+  integrity sha512-iP3dA/Cl4Rf5sQuA8sOaja2nU+ziDhc78FCMJTatJGxWjKX7BdL67RZPWXuOSCUHwZd1TJJ7/wUgMR390Q2ZHg==
+
 "@antv/x6-plugin-dnd@^2.0.4":
   version "2.0.4"
   resolved "https://registry.npmmirror.com/@antv/x6-plugin-dnd/-/x6-plugin-dnd-2.0.4.tgz#4358f424526731727d7392eddafad5018116cdfc"
   integrity sha512-DOT6/chhW67vD7+XXsvHs0ch01uqxyE7kbdrojgAsKftYmjXR+IveiXP7hzV0ObJ3k3V17xd3887f40S0Naxbg==
+
+"@antv/x6-plugin-history@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.npmmirror.com/@antv/x6-plugin-history/-/x6-plugin-history-2.1.2.tgz#0cac375082a3032988ffa7a9d2d9affd4a0bd829"
+  integrity sha512-U6SK6pyhYIWYlqjdJCjnNZ1nmJ9ImDK67Z+P/Kr0Cp0vIQjRgLFkYI+ADLX+FWVvObpi24DpG4EyCns4hrsJ9w==
 
 "@antv/x6-plugin-keyboard@^2.2.0":
   version "2.2.0"

@@ -2,6 +2,8 @@
   <ul class="menu_item_warp">
     <li @mouseenter="(e) => { mouseenter(e, item, index) }" @mouseleave="mouseleave" class="menu_item" :key="index"
       v-for="(item, index) in props.menu" @click="() => {clickFn(item,index)}">
+      <Edit style="width: 1em; height: 1em;margin-right: 8px;vertical-align: text-top;"  v-if="item.command === 'edit'" />
+      <Delete  style="width: 1em; height: 1em;margin-right: 8px;vertical-align: text-top;" v-if="item.command === 'delete'"/>
       <span>{{ item.label }}</span>
     </li>
     <MenuNode :style="childStyle" v-if="states.children && states.children.length !== 0" :menu="states.children" />
@@ -10,6 +12,7 @@
 
 <script setup lang="ts">
 import { computed, getCurrentInstance, reactive } from 'vue'
+import { Edit, Delete } from '@element-plus/icons-vue'
 import MenuNode from './MenuNode.vue'
 // 拿到当前组件的实例 上面有父组件的实例
 const currentCpn = getCurrentInstance()

@@ -7,11 +7,10 @@ li{list-style:none}
 img{border:0;vertical-align:middle} 
 table{border-collapse:collapse;border-spacing:0} 
 p{word-wrap:break-word} 
-
+@import './common.scss';
 @import './table.scss';
-
 @import './page.scss';
-
+@import '~@/assets/iconfont/iconfont.css';
 .drawer{
   .el-drawer__body{
     padding: 0 !important;
@@ -27,9 +26,9 @@ p{word-wrap:break-word}
 }
 
 .x6-widget-selection-box {
-  border: 2px solid #239edd;
+  border: 2px dashed #239edd;
 }
 
 .x6-widget-selection-inner {
-  border: 1px solid #239edd;
+  border: 1px dashed #239edd;
 }

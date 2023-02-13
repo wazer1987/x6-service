@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import { nextTick, reactive, ref, toRaw } from 'vue'
 import { getServicePropItem, getItem, SERVICE_KEY } from '@/utils'
+
 import { Check } from '@element-plus/icons-vue'
 import { Graph } from '@antv/x6'
 const getServicePropList = getServicePropItem()

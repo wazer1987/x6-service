@@ -17,5 +17,12 @@ module.exports = {
     // .set('components',resolve('./src/components'))
     // .set('views',resolve('./src/views'))
     // .set('assets',resolve('./src/assets'))
+  },
+  css: {
+    loaderOptions: {
+      scss: {
+        additionalData: '@import "~@/styles/common.scss";'
+      }
+    }
   }
 }
