@@ -1,56 +1,43 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { initX6, initStencil } from '@/x6/index'
-import { initEvent, bus } from '@/x6/InitEvent'
+import { initEvent, bus, uselogicHook } from '@/x6/InitEvent'
 import RightMenu from '@/components/RightMenu/RightMenu.vue'
 import { Graph } from '@antv/x6'
 import NodeOperde from '../NodeOperate/index.vue'
+import logic from '../NodeConfigPage/logic'
 const graphcontainer = ref()
 const stencil = ref()
-const nodeOperdeDom = ref()
-// 点击节点的时候打开抽屉
-const open = (node: any, graph: Graph, nodeOredge: string) => {
-  nodeOperdeDom.value.openDrawer(node, graph, nodeOredge)
-}
-// 点击边的时候 打开抽屉
-const edgeOpen = (edge: any, graph: Graph, nodeOredge: string) => {
-  nodeOperdeDom.value.edgeOpenDrawer(edge, graph, nodeOredge)
-}
+
 let graph: Graph
 onMounted(() => {
   graph = initX6(graphcontainer.value)
   initStencil(stencil.value)
   initEvent(graph, graphcontainer.value)
 })
+/**
+ *  @param menuclick 右键菜单点击的回调
+ *  @param rightMenuRef 右键菜单实例DOM 上面有打开显示和隐藏右键菜单的方法
+ *  @param nodeOperdeDom 右侧弹出框的实例DOM 上面 有显示 和关闭的方法
+ *  @param Menu 右键菜的配置 label 文字 command 用于来判断 是编辑还是删除
+ */
+const { menuclick, rightMenuRef, Menu, nodeOperdeDom } = uselogicHook()
 
-bus.on('node:click', (cell: any) => {
-  const { node } = cell
-  open(node, graph, 'node')
-})
-
-bus.on('edge:click', (cell: any) => {
-  console.log('点击了边')
-
-  const { edge } = cell
-  edgeOpen(edge, graph, 'edge')
-})
-
-const rightMenuRef = ref()
-bus.on('node:contextmenu', (cell: any) => {
-  const { x, y } = cell
-  rightMenuRef.value.openRightMenu(x, y)
-})
-bus.on('blank:click', () => {
-  rightMenuRef.value.clearRightMenu()
-})
 </script>
 
 <template>
   <div style="display: flex; position: relative;">
+    <!-- 左侧的拖拽 -->
     <div style="width: 180px;position: relative;border-right: 1px solid #dfe3e8;" ref="stencil"></div>
+
+    <!-- 中间的图区域 -->
     <div style="width: calc(100% - 180px);height: 100%;" ref="graphcontainer"></div>
+
+    <!-- 右侧弹框的组件-->
     <NodeOperde ref="nodeOperdeDom" />
-    <RightMenu ref="rightMenuRef" />
+
+    <!-- 右键的按钮 -->
+    <RightMenu ref="rightMenuRef" :menu="Menu" @nodeclick="menuclick"/>
   </div>
 </template>
 

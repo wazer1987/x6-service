@@ -14,47 +14,7 @@ import MenuItem from './MenuItem.vue'
 const props = defineProps({
   menu: {
     type: Array,
-    default: () => [
-      {
-        label: '菜单1',
-        clickFn: () => {
-          console.log('点击了菜单1')
-        },
-        children: [{
-          label: '菜单1-1',
-          clickFn: () => {
-            console.log('菜单1-1')
-          }
-        }]
-      },
-      {
-        label: '菜单2',
-        clickFn: () => { console.log('点击了菜单2') },
-        children: [{
-          label: '菜单2-1',
-          clickFn: () => {
-            console.log('菜单2-1')
-          },
-          children: [
-            {
-              label: '菜单2-1-1',
-              clickFn: () => {
-                console.log('菜单2-1')
-              },
-              children: [
-                {
-                  label: '菜单2-1-1-1',
-                  clickFn: () => {
-                    console.log('菜单2-1')
-                  }
-                }
-              ]
-            }
-
-          ]
-        }]
-      }
-    ]
+    default: () => []
   }
 })
 
@@ -72,6 +32,7 @@ const position = computed(() => {
 })
 
 const openRightMenu = (x: number, y: number) => {
+  if (props.menu.length === 0) return
   states.x = x
   states.y = y
   states.display = 'block'
@@ -95,7 +56,7 @@ defineExpose({
   position: absolute;
   border: 1px solid rgb(149, 149, 149);
   border-radius: 3px;
-  padding: 5px 0;
+  padding: 7px 0;
   background: #fff;
   z-index: 999;
 
