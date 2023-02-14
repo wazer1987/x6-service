@@ -10,6 +10,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue'
 import MenuItem from './MenuItem.vue'
+import { bus } from '@/x6/InitEvent/index'
 // eslint-disable-next-line no-undef
 const props = defineProps({
   menu: {
@@ -30,9 +31,23 @@ const position = computed(() => {
     display: states.display
   }
 })
-
+// 画布 平移动的坐标
+const translate = reactive({
+  x: 0,
+  y: 0
+})
+bus.on('translate', (cell) => {
+  clearRightMenu()
+  const { tx, ty } = cell
+  translate.x = tx
+  translate.y = ty
+})
 const openRightMenu = (x: number, y: number) => {
   if (props.menu.length === 0) return
+  console.log(translate.x, translate.y)
+
+  x = x + translate.x
+  y = y + translate.y
   states.x = x
   states.y = y
   states.display = 'block'

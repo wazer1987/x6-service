@@ -1,9 +1,9 @@
 import { Graph } from '@antv/x6'
 import { commonStyele } from '../NodeStyleConfig/commonStyle'
 
-// import mitt from 'mitt'
+import mitt from 'mitt'
 import { nextTick, ref } from 'vue'
-// export const bus = mitt()
+export const bus = mitt()
 
 const showPorts = (ports: NodeListOf<SVGElement>, show: boolean) => {
   for (let i = 0, len = ports.length; i < len; i = i + 1) {
@@ -58,6 +58,9 @@ const enventList = {
   },
   'blank:click': (key:string, cell:any, Dom:HTMLElement) => {
     rightMenuRef.value.clearRightMenu()
+  },
+  translate: (key:string, cell:any, Dom:HTMLElement) => {
+    bus.emit(key, cell)
   }
 }
 
