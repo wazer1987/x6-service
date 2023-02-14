@@ -1,8 +1,9 @@
 <!-- eslint-disable no-undef -->
 <script setup lang="ts">
-import { Plus, SemiSelect } from '@element-plus/icons-vue'
+import { Plus, SemiSelect, Switch, Finished } from '@element-plus/icons-vue'
 import { getServicePropItem, setServicePropItem } from '@/utils/index'
-import { reactive, computed } from 'vue'
+import MethodParams from './mehotdParams/index.vue'
+import { reactive, computed, ref } from 'vue'
 const props = defineProps({
   modelValue: {
     type: String,
@@ -26,7 +27,7 @@ const states = reactive({
 })
 
 const add = () => {
-  states.props.push({ name: '', prop: '', value: '' } as never)
+  states.props.push({ name: '', prop: '', value: '', flag: true } as never)
 }
 const del = (index:any) => {
   states.props.splice(index, 1)
@@ -59,6 +60,9 @@ const save = () => {
   setServicePropItem(data)
   dialogStates.dialogVisible = false
 }
+const check = (item) => {
+  item.flag = !item.flag
+}
 
 const value = computed({
   get () {
@@ -72,11 +76,11 @@ const value = computed({
 </script>
 
 <template>
-  <div @click="openDialog" style="width:100%;">
+  <div @click="openDialog" style="width:100%;" >
     <el-input :model-value="value" disabled ></el-input>
   </div>
 
-  <el-dialog :close-on-click-modal="false" v-model="dialogStates.dialogVisible" width="50%">
+  <el-dialog center :close-on-click-modal="false" v-model="dialogStates.dialogVisible" width="50%">
   <el-form  label-position="left">
     <el-row :gutter="24" class="mb">
       <el-col >
@@ -86,31 +90,37 @@ const value = computed({
       </el-col>
     </el-row>
     <el-divider content-position="left">方法入参</el-divider>
-    <el-row :gutter="24" v-for="(item,index) in states.props" :key="index" class="mb">
-      <el-col :span="1">
+    <el-row :gutter="12" v-for="(item,index) in states.props" :key="index" class="mb">
+      <el-col :span="2">
         <el-button @click="add" v-if="index === 0" type="primary" :icon="Plus" circle />
         <el-button  v-else @click="del(index)" type="danger" :icon="SemiSelect" circle />
       </el-col>
-      <el-col :span="7">
+      <el-col :span="11">
         <el-form-item label="字段名称:" prop="name">
           <el-input v-model="item.name" />
         </el-form-item>
       </el-col>
-      <el-col :span="7" >
+      <el-col :span="11" >
         <el-form-item label="字段:" prop="prop">
           <el-input v-model="item.prop" />
         </el-form-item>
       </el-col>
-      <el-col :span="9" >
+      <el-col :span="2" style="margin-top:10px">
+        <el-form-item>
+          <el-button type="primary" @click="() => {check(item)}" :icon="Switch" circle />
+        </el-form-item>
+      </el-col>
+      <el-col :span="22" style="margin-top:10px">
         <el-form-item label="默认值:" prop="value">
-          <el-input v-model="item.value" />
+          <el-input v-if="item.flag" v-model="item.value" />
+          <MethodParams v-else v-model="item.value"/>
         </el-form-item>
       </el-col>
     </el-row>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button type="primary" @click="save">
+        <el-button :icon="Finished" type="primary" @click="save">
           保存
         </el-button>
       </span>

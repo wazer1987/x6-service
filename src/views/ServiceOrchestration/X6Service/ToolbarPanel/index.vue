@@ -1,19 +1,24 @@
 <script setup lang="ts">
 import logo from '@/assets/logo.png'
 import { Graph } from '@antv/x6'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { toolbarMenu, toolbarMenuFn } from './ToolBarMenu'
-
+import Preview from '../Preview/index.vue'
 let graph:Graph
 const init = (cavans) => {
   graph = cavans
 }
+// 弹框相关
+const previewRef = ref()
+
 const commadClick = (item:any) => {
   if (item.command === 'preview' || item.command === 'upload' || item.command === 'down') {
+    previewRef.value.openDialog()
     return
   }
   toolbarMenuFn[item.command](graph)
 }
+
 // eslint-disable-next-line no-undef
 defineExpose({
   init
@@ -34,6 +39,7 @@ defineExpose({
         <i :class="item.icon"></i>
       </div>
     </div>
+    <Preview  ref="previewRef"/>
   </div>
 </template>
 
