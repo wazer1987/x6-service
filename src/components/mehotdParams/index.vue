@@ -37,11 +37,13 @@ const openDialog = () => {
     }
   }
 }
-let methodParams = computed({
+const methodParams = computed({
   get () {
     return props.modelValue
   },
   set (newvalue) {
+    console.log(newvalue, '===newvalue')
+
     emits('update:modelValue', newvalue)
   }
 })
@@ -61,28 +63,8 @@ const del = () => {
   states.paramsArr.pop()
 }
 
-const formatValue = () => {
-  const arr:any = []
-
-  states.paramsArr.forEach(item => {
-    console.log(item, '===item')
-
-    let str = ''
-    for (const key in item) {
-      if (!item[key]) {
-        continue
-      }
-      str += `${item[key]}:`
-    }
-    str = str.substring(0, str.length - 1)
-    arr.push(str)
-  })
-
-  return arr
-}
 const save = () => {
-  methodParams = JSON.stringify(states.paramsArr)
-  console.log(methodParams, '===methodParams')
+  methodParams.value = JSON.stringify(states.paramsArr)
   states.dialogVisible = false
 }
 

@@ -63,6 +63,26 @@ const saveServieData = () => {
 
 const serviceListItem = ref({})
 
+// 格式化 方法入参的方法
+const formatValue = (data) => {
+  console.log(data, '===data')
+
+  const arr:any = []
+  data = JSON.parse(data)
+  data.forEach(item => {
+    let str = ''
+    for (const key in item) {
+      if (!item[key]) {
+        continue
+      }
+      str += `${item[key]}:`
+    }
+    str = str.substring(0, str.length - 1)
+    arr.push(str)
+  })
+
+  return arr
+}
 // 点击节点初始化 抽屉操作
 const openDrawer = (node: any, graph: Graph, nodeOrEdge: string) => {
   isNodeOrEdge.value = nodeOrEdge
@@ -87,7 +107,11 @@ const openDrawer = (node: any, graph: Graph, nodeOrEdge: string) => {
   servicePropList.value = getServicePropList[serviceProp]
   // 初始化默认值
   servicePropList.value.forEach(item => {
-    serviceForm.value[item.prop] = item.value
+    if (item.flag) {
+      serviceForm.value[item.prop] = item.value
+    } else {
+      serviceForm.value[item.prop] = formatValue(item.value).join(',')
+    }
   })
   currentNode.value.setData(serviceForm.value)
   activeName.value = 'nodeConfig'
@@ -237,7 +261,8 @@ defineExpose({
         <el-divider content-position="left">方法入参</el-divider>
         <el-form :model="serviceForm" label-position="left" label-width="100px">
           <el-form-item v-for="item in servicePropList" :key="item.prop" :label="item.name + ':'">
-            <el-input v-model="serviceForm[item.prop]" />
+            <el-input v-if="item.flag" v-model="serviceForm[item.prop]" />
+            <el-input v-else type="textarea" disabled :autosize="{ minRows: 4}" v-model="serviceForm[item.prop]"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" :icon="Check" @click="saveServieData">保存</el-button>
