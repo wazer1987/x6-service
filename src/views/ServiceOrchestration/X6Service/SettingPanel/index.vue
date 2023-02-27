@@ -22,7 +22,7 @@ const form = reactive({
   id: ''
 })
 
-// 节点的业务数据
+// 节点的业务数据循环项目
 const servicePropList = ref([])
 // 业务数据表单
 const serviceForm = ref({})
@@ -58,7 +58,7 @@ const save = () => {
 // 节点的业务数据保存操作
 const saveServieData = () => {
   console.log('保存节点业务数据')
-  currentNode.value.setData(serviceForm.value)
+  currentNode.value.setData({ servicePropForm: serviceForm.value })
 }
 
 const serviceListItem = ref({})
@@ -83,37 +83,47 @@ const formatValue = (data) => {
 
   return arr
 }
+
 // 点击节点初始化 抽屉操作
 const openDrawer = (node: any, graph: Graph, nodeOrEdge: string) => {
+  // 用来判断属性表单 该显示节点还是边
   isNodeOrEdge.value = nodeOrEdge
   // 当前点击的节点
   currentNode.value = node
   graphcanvas = graph
   // 拿到节点的 样式 宽高等
   const config = node.prop()
+  // console.log(config, '===config')
+
   const shapeArr = config.shape.split('-')
+  // 这里是用来 你是圆形 或者矩形的时候 选中mark的标签用的
   shapeFlag.value = shapeArr[shapeArr.length - 1]
   // 赋值给节点的表单
   Object.assign(form, config)
 
   // 拿到业务数据
-
-  const { serviceProp } = node.getData()
+  console.log(node.getData(), '===getdata')
+  // serviceProp 方法标识 servicePropForm 存放业务数据 servicePropList业务数据值
+  const { serviceProp, servicePropForm, servicePropOptions } = node.getData()
 
   // 拿到表单的服务类型和斌方法
   const serviceList = getItem(SERVICE_KEY)
+  // 拿到节点的属性  用来便利 服务类型 和 Bean 名称
   serviceListItem.value = serviceList.find(item => item.serviceProp === serviceProp)
-
-  servicePropList.value = getServicePropList[serviceProp]
-  // 初始化默认值
-  servicePropList.value.forEach(item => {
-    if (item.flag) {
-      serviceForm.value[item.prop] = item.value
-    } else {
-      serviceForm.value[item.prop] = formatValue(item.value).join(',')
-    }
-  })
-  currentNode.value.setData(serviceForm.value)
+  servicePropList.value = servicePropOptions
+  if (Object.keys(servicePropForm).length === 0) {
+    // 初始化默认值
+    servicePropList.value.forEach(item => {
+      if (item.flag) {
+        serviceForm.value[item.prop] = item.value
+      } else {
+        serviceForm.value[item.prop] = formatValue(item.value).join(',')
+      }
+    })
+    currentNode.value.setData({ servicePropForm: serviceForm.value })
+  } else {
+    serviceForm.value = servicePropForm
+  }
   activeName.value = 'nodeConfig'
   drawer.value = true
 }
@@ -181,6 +191,7 @@ const NodeId = reactive({
   id: ''
 })
 
+// 链路追踪
 const path: any = []
 const tinkTraceDeep = (id: string) => {
   const cell = graphcanvas.getCellById(id)

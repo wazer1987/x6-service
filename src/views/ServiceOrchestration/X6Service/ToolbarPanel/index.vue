@@ -13,7 +13,7 @@ const previewRef = ref()
 
 const commadClick = (item: any) => {
   if (item.command === 'preview' || item.command === 'upload' || item.command === 'down') {
-    previewRef.value.openDialog()
+    previewRef.value.openDialog(graph)
     return
   }
   toolbarMenuFn[item.command](graph)

@@ -1,11 +1,87 @@
 <script setup lang="ts">
+import { Graph } from '@antv/x6'
 import { reactive } from 'vue'
-
+import { initServiceProp } from '@/utils/serviceprop'
 const states = reactive({
-  dialogVisible: false
+  dialogVisible: false,
+  activeName: 'User'
 })
-const openDialog = () => {
+let graph:any
+const openDialog = (cavans:Graph) => {
   states.dialogVisible = true
+  graph = cavans
+  genXML()
+}
+
+const genXML = () => {
+  const rootnode = rootNode()
+
+  const children = genNeighbors(rootnode)
+  if (children.length > 0) {
+    const choice = genChoice(children)
+  }
+}
+
+const whenTempalte = (child:any) => {
+  console.log(child.getData(), '===getData()')
+  initServiceProp(child)
+  return `
+    <when>
+    <to >
+    </when> 
+  `
+}
+
+// 生成choice标签
+const genChoice = (children:any) => {
+  let template = '<choice>'
+  // return whenTempalte(child)
+  children.forEach((child:any) => {
+    template += whenTempalte(child)
+  })
+  template += '</choice>'
+}
+
+// 查找当前节点下的子节点
+const genNeighbors = (node:any) => {
+  const nodes = graph.getNeighbors(node, { deep: false, outgoing: true })
+  return nodes
+}
+
+// 找到根节点
+const rootNode = () => {
+  const root = graph.getRootNodes()
+  const id = root[0].id
+  const node = graph.getCellById(id)
+  return root[0]
+  // 返回所有的根节点
+  // const root = graph.getRootNodes()
+  // console.log(root, '===root')
+
+  // 可以获取所有的终点 就是没有输出边的节点
+  // console.log(graph.getLeafNodes(), '====getLeafNodes')
+  // const node1 = graph.getCellById('35927f1b-c340-4a20-aa73-116f85aae7ce')
+
+  // const node2 = graph.getCellById('d66a3ff3-d005-456a-ac05-84ede03c1a77')
+  // 可以获取 一条线上的所有节点
+  // console.log(graph.getPredecessors(node2, {
+  //   deep: true
+  // }))
+  // 获取自己所有两端的节点
+  // const node3 = graph.getCellById('7090c5a0-08ed-428a-902d-4c7c16895d96')
+  // console.log(graph.getNeighbors(node3), '===getNeighbors')
+
+  // 获取当前节点下的所有子孙节点 是个数组
+  // const node4 = graph.getCellById('35927f1b-c340-4a20-aa73-116f85aae7ce')
+  // console.log(graph.getSuccessors(node4, { breadthFirst: true }), '====getSuccessors1')
+
+  // const node5 = graph.getCellById('88d5f3ff-6f4e-4457-b56c-f93391c65047')
+  // console.log(graph.getNeighbors(node5, { indirect: true, outgoing: true }))
+  // const root = graph.getRootNodes()
+  // const node = graph.getCellById(root[0].id)
+  // const id = root[0].id
+  // const nodes = graph.getNeighbors(node, { deep: false, outgoing: true })
+  // console.log(nodes, '===nodes1')
 }
 
 const handleClick = () => {
@@ -21,7 +97,7 @@ defineExpose({
   <div>
     <el-dialog class="custom_dialog" v-model="states.dialogVisible" title="预览" :close-on-click-modal="false"
       width="30%">
-      <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+      <el-tabs v-model="states.activeName" class="demo-tabs" @tab-click="handleClick">
         <el-tab-pane label="User" name="first">User</el-tab-pane>
         <el-tab-pane label="Config" name="second">Config</el-tab-pane>
         <el-tab-pane label="Role" name="third">Role</el-tab-pane>
@@ -31,7 +107,7 @@ defineExpose({
         <span class="dialog-footer">
           <el-button @click="states.dialogVisible = false">Cancel</el-button>
           <el-button type="primary" @click="states.dialogVisible = false">
-            Confirm
+            保存
           </el-button>
         </span>
       </template>
@@ -41,7 +117,6 @@ defineExpose({
 
 <style scoped lang="scss">
 :deep(.el-overlay-dialog) {
-
   .el-dialog__body {
     padding: 10px !important;
   }

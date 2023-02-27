@@ -6,7 +6,7 @@ import { reactive, ref } from 'vue'
 const form = reactive({
   id: '',
   serviceType: '',
-  serviceValue: '',
+  serviceValue: {},
   serviceProp: ''
 })
 const formRef = ref(null)

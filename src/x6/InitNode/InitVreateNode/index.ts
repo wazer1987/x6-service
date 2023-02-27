@@ -1,6 +1,6 @@
 import { Graph } from '@antv/x6'
 import { NodeListItem } from '../../CodeTypeConfig/index'
-
+import { getServicePropItem } from '@/utils/index'
 // const initNodeData = (key:string) => {
 //   const arr = getServicePropList[key]
 //   const obj = {
@@ -18,6 +18,7 @@ import { NodeListItem } from '../../CodeTypeConfig/index'
 // }
 // 左侧添加节点图形
 export const initCreateNode = (item:NodeListItem, graph:Graph) => {
+  const servicePropList = getServicePropItem()[item.serviceType]
   return graph.createNode({
     shape: `custom-${item.id}-${item.nodeShape}`,
     label: `${item.nodeName}`,
@@ -27,7 +28,9 @@ export const initCreateNode = (item:NodeListItem, graph:Graph) => {
       }
     },
     data: {
-      serviceProp: item.serviceType
+      serviceProp: item.serviceType,
+      servicePropOptions: servicePropList,
+      servicePropForm: {}
     }
   })
 }

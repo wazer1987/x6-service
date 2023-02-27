@@ -1,5 +1,6 @@
 import { nextTick, toRef } from 'vue'
-import { SERVICE_KEY, setItem, getItem } from '@/utils/index'
+import { SERVICE_KEY, setItem, getItem, getServicePropItem } from '@/utils/index'
+
 type Item = {
   title:string,
   fn(states?:any, refFormDom?:any, callback?:() => void):any,
@@ -20,6 +21,7 @@ const logic:Logic = {
     },
     fn (states?:any, refFormDom?:any, callback?:() => void) {
       states.bntLoading = true
+      // refFormDom.value.form.serviceValue = getServicePropItem()[refFormDom.value.form.serviceProp]
       setTimeout(() => {
         let data = getItem(SERVICE_KEY)
         if (data) {
@@ -38,6 +40,7 @@ const logic:Logic = {
     title: '编辑',
     fn (states?:any, refFormDom?:any, callback?:() => void) {
       states.bntLoading = true
+      // refFormDom.value.form.serviceValue = getServicePropItem()[refFormDom.value.form.serviceProp]
       setTimeout(() => {
         const data = getItem(SERVICE_KEY)
         const index = data.findIndex((item:any) => item.id === states.currentRow.id)
