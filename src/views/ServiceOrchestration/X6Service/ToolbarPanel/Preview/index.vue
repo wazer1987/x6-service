@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Graph } from '@antv/x6'
 import { reactive } from 'vue'
-import { initServiceProp } from '@/utils/serviceprop'
+import { initServiceProp, splicingParams } from '@/utils/serviceprop'
 const states = reactive({
   dialogVisible: false,
   activeName: 'User'
@@ -10,26 +10,53 @@ let graph:any
 const openDialog = (cavans:Graph) => {
   states.dialogVisible = true
   graph = cavans
-  genXML()
+  console.log(graph.getCells(), '===cell')
+
+  // initXML()
 }
 
-const genXML = () => {
+const arrStr = []
+
+const initXML = () => {
   const rootnode = rootNode()
 
+  genXML(rootnode)
+  console.log(arrStr.join(''))
+}
+const genXML = (rootnode:any) => {
   const children = genNeighbors(rootnode)
-  if (children.length > 0) {
-    const choice = genChoice(children)
+  if (children.length === 0) return
+  if (children.length > 1) {
+    arrStr.push(genChoice(children))
+  } else if (children.length === 1) {
+    arrStr.push(genTo(children[0]))
   }
+  // children.forEach((child:any) => {
+  //   genXML(child)
+  // })
 }
 
+// 生成to模板的方法
+const toTempLate = (child:any) => {
+  // 获取节点名称
+  const { text: { text } } = child.getAttrs()
+  // 拿到mean方法名称
+  const { serviceProp } = child.getData()
+  // 如果 你的 serviceForm是个空对象 那就需要初始化如果不是 就直接返回
+  const formData = initServiceProp(child)
+  return `<to id='${text}' uri="bean:${serviceProp}?method=doProcess(*,*,${splicingParams(formData)})">`
+}
+
+// to的入口函数
+const genTo = (child) => {
+  return toTempLate(child)
+}
+// when模板的方法
 const whenTempalte = (child:any) => {
-  console.log(child.getData(), '===getData()')
-  initServiceProp(child)
   return `
-    <when>
-    <to >
-    </when> 
-  `
+   <when>
+    ${toTempLate(child)}
+   </when>`
 }
 
 // 生成choice标签
@@ -39,7 +66,8 @@ const genChoice = (children:any) => {
   children.forEach((child:any) => {
     template += whenTempalte(child)
   })
-  template += '</choice>'
+  template += '\r\n</choice>\r\n'
+  return template
 }
 
 // 查找当前节点下的子节点

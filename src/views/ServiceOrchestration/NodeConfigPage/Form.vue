@@ -45,7 +45,7 @@ defineExpose({
     </el-form-item>
     <el-form-item label="服务类型:" prop="serviceType">
       <el-select style="width:100%;" v-model="form.serviceType">
-        <el-option v-for="item in options" :key="item.serviceProp" :label="item.serviceType" :value="item.serviceProp" />
+        <el-option v-for="item in options" :key="item.serviceProp" :label="item.serviceType" :value="item.meanName" />
       </el-select>
     </el-form-item>
   </el-form>

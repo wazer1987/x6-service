@@ -1,13 +1,15 @@
 <!-- eslint-disable no-undef -->
 <script setup>
-import ServicePropItem from '@/components/ServicePropItem.vue'
+import ParamsList from '@/components/ParamsList.vue'
 import { reactive, ref } from 'vue'
 
 const form = reactive({
   id: '',
   serviceType: '',
-  serviceValue: {},
-  serviceProp: ''
+  meanName: '',
+  serviceParams: [
+
+  ]
 })
 const formRef = ref(null)
 const clearForm = () => {
@@ -28,8 +30,12 @@ defineExpose({
     <el-form-item label="服务类型:" prop="serviceType">
       <el-input v-model="form.serviceType" />
     </el-form-item>
-    <el-form-item label="Bean名称:" prop="serviceProp">
-      <ServicePropItem v-model="form.serviceProp"  v-bind="$attrs"/>
+    <el-form-item label="Bean名称:" prop="meanName">
+      <el-input v-model="form.meanName" />
+    </el-form-item>
+    <el-form-item label="参数:" prop="serviceParams">
+      <!-- <ServicePropItem v-model="form.serviceParams" :meanName="form.meanName" v-bind="$attrs"/> -->
+      <ParamsList v-model="form.serviceParams" :meanName="form.meanName" v-bind="$attrs"/>
     </el-form-item>
   </el-form>
 </template>

@@ -18,7 +18,8 @@ import { getServicePropItem } from '@/utils/index'
 // }
 // 左侧添加节点图形
 export const initCreateNode = (item:NodeListItem, graph:Graph) => {
-  const servicePropList = getServicePropItem()[item.serviceType]
+  const servicePropList = getServicePropItem()
+  const { meanName, serviceParams, serviceType } = servicePropList.find((propitem:any) => propitem.meanName === item.serviceType)
   return graph.createNode({
     shape: `custom-${item.id}-${item.nodeShape}`,
     label: `${item.nodeName}`,
@@ -28,9 +29,10 @@ export const initCreateNode = (item:NodeListItem, graph:Graph) => {
       }
     },
     data: {
-      serviceProp: item.serviceType,
-      servicePropOptions: servicePropList,
-      servicePropForm: {}
+      meanName,
+      serviceParams,
+      servicePropForm: {},
+      serviceType
     }
   })
 }

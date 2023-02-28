@@ -27,7 +27,7 @@ export const setItem = (key:string, value:any) => {
 }
 
 // 服务属性
-export const SERVICE_PROP_KEY = 'servicePropsList'
+export const SERVICE_PROP_KEY = 'serviceList'
 
 export const getServicePropItem = () => {
   return JSON.parse(localStorage.getItem(SERVICE_PROP_KEY) as string)

@@ -1,8 +1,9 @@
 <!-- eslint-disable no-undef -->
 <script setup lang="ts">
 import { nextTick, reactive, ref, toRaw } from 'vue'
+import ParamsList from '@/components/ParamsList.vue'
 import { getServicePropItem, getItem, SERVICE_KEY } from '@/utils'
-
+// import SettingServiceProp '@/components/SettingServiceProp.vue'
 import { Check } from '@element-plus/icons-vue'
 import { Graph } from '@antv/x6'
 const getServicePropList = getServicePropItem()
@@ -55,13 +56,19 @@ const save = () => {
   })
 }
 
+// xml参数
+const serviceListItem = reactive({
+  meanName: '',
+  serviceType: '',
+  serviceParams: []
+
+})
+
 // 节点的业务数据保存操作
 const saveServieData = () => {
   console.log('保存节点业务数据')
-  currentNode.value.setData({ servicePropForm: serviceForm.value })
+  currentNode.value.setData({ serviceParams: serviceListItem.serviceParams })
 }
-
-const serviceListItem = ref({})
 
 // 格式化 方法入参的方法
 const formatValue = (data) => {
@@ -103,27 +110,10 @@ const openDrawer = (node: any, graph: Graph, nodeOrEdge: string) => {
 
   // 拿到业务数据
   console.log(node.getData(), '===getdata')
-  // serviceProp 方法标识 servicePropForm 存放业务数据 servicePropList业务数据值
-  const { serviceProp, servicePropForm, servicePropOptions } = node.getData()
-
-  // 拿到表单的服务类型和斌方法
-  const serviceList = getItem(SERVICE_KEY)
-  // 拿到节点的属性  用来便利 服务类型 和 Bean 名称
-  serviceListItem.value = serviceList.find(item => item.serviceProp === serviceProp)
-  servicePropList.value = servicePropOptions
-  if (Object.keys(servicePropForm).length === 0) {
-    // 初始化默认值
-    servicePropList.value.forEach(item => {
-      if (item.flag) {
-        serviceForm.value[item.prop] = item.value
-      } else {
-        serviceForm.value[item.prop] = formatValue(item.value).join(',')
-      }
-    })
-    currentNode.value.setData({ servicePropForm: serviceForm.value })
-  } else {
-    serviceForm.value = servicePropForm
-  }
+  const { meanName, serviceParams, serviceType } = node.getData()
+  serviceListItem.meanName = meanName
+  serviceListItem.serviceType = serviceType
+  serviceListItem.serviceParams = serviceParams
   activeName.value = 'nodeConfig'
   drawer.value = true
 }
@@ -261,20 +251,21 @@ defineExpose({
         </el-form>
       </el-tab-pane>
       <el-tab-pane v-if="isNodeOrEdge === 'node'" name="serviceConfig" label="服务编排设置">
-        <el-form label-position="left" label-width="100px">
+        <el-form  label-position="left" label-width="100px">
           <el-form-item label="服务类型:">
             <el-input disabled v-model="serviceListItem.serviceType" />
           </el-form-item>
           <el-form-item label="Bean名称:">
-            <el-input disabled v-model="serviceListItem.serviceProp" />
+            <el-input disabled v-model="serviceListItem.meanName" />
           </el-form-item>
-        </el-form>
-        <el-divider content-position="left">方法入参</el-divider>
-        <el-form :model="serviceForm" label-position="left" label-width="100px">
-          <el-form-item v-for="item in servicePropList" :key="item.prop" :label="item.name + ':'">
+          <el-form-item  label="方法参数:">
+            <ParamsList v-model="serviceListItem.serviceParams" />
+          </el-form-item>
+          <!-- <el-form-item v-for="item in servicePropList" :key="item.prop" :label="item.name + ':'">
             <el-input v-if="item.flag" v-model="serviceForm[item.prop]" />
             <el-input v-else type="textarea" disabled :autosize="{ minRows: 4}" v-model="serviceForm[item.prop]"></el-input>
-          </el-form-item>
+          </el-form-item> -->
+          <!-- <SettingServiceProp /> -->
           <el-form-item>
             <el-button type="primary" :icon="Check" @click="saveServieData">保存</el-button>
           </el-form-item>

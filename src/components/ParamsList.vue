@@ -1,17 +1,12 @@
 <!-- eslint-disable no-undef -->
 <script setup lang="ts">
 import { Plus, SemiSelect, Switch, Finished } from '@element-plus/icons-vue'
-import { getServicePropItem, setServicePropItem } from '@/utils/index'
 import MethodParams from './mehotdParams/index.vue'
 import { reactive, computed, ref } from 'vue'
 const props = defineProps({
   modelValue: {
-    type: String,
-    default: () => ''
-  },
-  meanName: {
-    type: String,
-    default: () => ''
+    type: Array,
+    default: () => []
   },
   logic: {
     type: String,
@@ -31,40 +26,32 @@ const states = reactive({
 })
 
 const add = () => {
-  states.props.push({ name: '', prop: '', value: '', flag: true } as never)
+  // eslint-disable-next-line vue/no-mutating-props
+  props.modelValue.push({ name: '', prop: '', value: '', flag: true } as never)
 }
 const del = (index:any) => {
-  states.props.splice(index, 1)
+  // eslint-disable-next-line vue/no-mutating-props
+  props.modelValue.splice(index, 1)
 }
 const init = () => {
-  if (!states.props.length) {
+  if (!props.modelValue.length) {
     add()
   }
 }
 const openDialog = () => {
-  states.props = []
+  // states.props = []
   dialogStates.dialogVisible = true
   if (props.logic === 'add') {
     init()
   } else if (props.logic === 'edit') {
-    const data = getServicePropItem()
-    states.props = data[props.modelValue]
+    // const data = getServicePropItem()
+    // states.props = data[props.modelValue]
   }
 }
 
 const save = () => {
-  console.log(states.props, '===props')
-
-  // let data = getServicePropItem()
-  // const obj = {}
-  // obj[states.serviceName] = states.props
-  // if (!data) {
-  //   data = { ...obj }
-  // } else {
-  //   data = { ...data, ...obj }
-  // }
-  // setServicePropItem(data)
-  // dialogStates.dialogVisible = false
+  emit('update:modelValue', props.modelValue)
+  dialogStates.dialogVisible = false
 }
 const check = (item) => {
   item.flag = !item.flag
@@ -72,9 +59,11 @@ const check = (item) => {
 
 const value = computed({
   get () {
-    return props.modelValue
+    return JSON.stringify(props.modelValue)
   },
   set (value) {
+    console.log('走到set')
+
     states.serviceName = value
     emit('update:modelValue', value)
   }
@@ -83,12 +72,12 @@ const value = computed({
 
 <template>
   <div @click="openDialog" style="width:100%;" >
-    <el-input :model-value="modelValue" disabled ></el-input>
+    <el-input :autosize="{ minRows: 8, maxRows: 12 }" type="textarea" :model-value="value" disabled ></el-input>
   </div>
 
   <el-dialog center :close-on-click-modal="false" v-model="dialogStates.dialogVisible" width="50%">
   <el-form  label-position="left">
-    <el-row :gutter="12" v-for="(item,index) in states.props" :key="index" class="mb">
+    <el-row :gutter="12" v-for="(item,index) in modelValue" :key="index" class="mb">
       <el-col :span="2">
         <el-button @click="add" v-if="index === 0" type="primary" :icon="Plus" circle />
         <el-button  v-else @click="del(index)" type="danger" :icon="SemiSelect" circle />
