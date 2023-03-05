@@ -90,7 +90,7 @@ const isGlobleOptions = [
     <el-input autosize type="textarea" v-model="methodParams" disabled placeholder="请输入方法参数" />
     <el-dialog :close-on-click-modal="false" :append-to-body="true" v-model="states.dialogVisible" title="方法入参" center
       width="40%">
-      <el-row><el-button type="primary" style="width:100%;" @click="add">添加一组参数</el-button></el-row>
+      <!-- <el-row><el-button type="primary" style="width:100%;" @click="add">添加一组参数</el-button></el-row> -->
       <el-divider />
 
       <el-form :model="states.form" label-position="top" label-width="90px">
@@ -136,7 +136,7 @@ const isGlobleOptions = [
         </el-row>
 
       </el-form>
-      <el-row><el-button type="danger" style="width:100%;" @click="del">删除一组参数</el-button></el-row>
+      <!-- <el-row><el-button type="danger" style="width:100%;" @click="del">删除一组参数</el-button></el-row> -->
       <template #footer>
         <span class="dialog-footer">
           <el-button type="primary" @click="save" :icon="Finished">

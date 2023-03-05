@@ -50,3 +50,24 @@ export const splicingParams = (obj:any) => {
   }
   return arr.join()
 }
+
+export const formatParams = (serviceParams:any) => {
+  // console.log(serviceParams, '==serviceParams')
+
+  const paramsArr:any = []
+  let typeParams = ''
+  let currentIndex:any
+  serviceParams.forEach((item:any, index:number) => {
+    if (item.flag) {
+      paramsArr.push(item.value)
+    } else {
+      if (!paramsArr[index]) {
+        currentIndex = index
+      }
+      typeParams += formatValue(item.value)[0] + ','
+    }
+  })
+  typeParams = typeParams.substring(0, typeParams.length - 1)
+  paramsArr[currentIndex] = typeParams
+  return paramsArr
+}
