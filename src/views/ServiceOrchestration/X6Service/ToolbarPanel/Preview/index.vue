@@ -1,89 +1,47 @@
 <script setup lang="ts">
 import { Graph } from '@antv/x6'
-import { reactive } from 'vue'
-import { initServiceProp, splicingParams, formatParams } from '@/utils/serviceprop'
-import Codemirror from 'codemirror-editor-vue3'
+import { reactive, ref } from 'vue'
+import codeXmlEditor from '@/components/codeXmlEditor.vue'
+import { genXML } from '@/gencode/genXML'
+import { TabsPaneContext } from 'element-plus'
+import item from 'element-plus/es/components/space/src/item'
 // @types/codemirror
 const states = reactive({
   dialogVisible: false,
-  activeName: 'first',
-  xmlCode: ''
+  activeName: 'XML',
+  xmlCode: '',
+  jsonCode: '',
+  imgdata: ''
 })
+const josnREF = ref()
 
 let graph: any
-let xml: any = []
+// let xml: any = []
 const openDialog = (cavans: Graph) => {
   states.dialogVisible = true
-  states.activeName = 'first'
+  states.activeName = 'XML'
   graph = cavans
-  xml = []
-  const root = rootNode()
-  genXMLEntry(root)
-  console.log(xml, '===xml')
-  states.xmlCode = xml.reverse().join('\r\n')
+  states.xmlCode = genXML(graph)
+  states.jsonCode = JSON.stringify(graph.toJSON(), null, 2)
 }
 
-const genXMLEntry = (node: any): any => {
-  const nextNodes = genNeighbors(node)
-  console.log(nextNodes, '===nextNodes')
-  if (nextNodes.length === 0) return
-  if (nextNodes.length > 1) {
-    console.log('这里说明我下一个节点是分支')
-    let choise = '<choice>'
-    nextNodes.forEach((item: any) => {
-      choise += genWhenTempLate(item)
-    })
-    choise += '\r\n</choice>\r\n'
-    xml.push(choise)
-  } else {
-    console.log('这里说明我下一个节点是一个')
-    const to = genToTempLate(nextNodes[0])
-    return to
+const handleClick = (pane: TabsPaneContext, ev: Event) => {
+  // console.log(22222)
+
+  const { paneName } = pane
+  console.log(pane, '===pane')
+
+  if (paneName === 'IMG') {
+    initImg()
   }
 }
-// when 的模板
-const genWhenTempLate = (node: any) => {
-  return `
-  <when>
-    ${genToTempLate(node)}
-  </when>`
+const initImg = () => {
+  graph.toPNG((dataUri: string) => {
+    states.imgdata = dataUri
+  })
 }
-const genToTempLate = (node: any) => {
-  let to = ''
-  const { text: { text } } = node.getAttrs()
-
-  // 拿到mean方法名称
-  const { meanName, serviceParams } = node.getData()
-
-  // 如果 你的 serviceForm是个空对象 那就需要初始化如果不是 就直接返回
-  const formData = formatParams(serviceParams)
-  to = `<to id='${text}' uri="bean:${meanName}?method=doProcess(*,*,${splicingParams(formData)}})">`
-  const nextTo = genXMLEntry(node)
-  if (nextTo) {
-    return to + '\n' + nextTo
-  }
-  return to
-}
-
-// // 查找当前节点下的子节点
-const genNeighbors = (node: any) => {
-  const nodes = graph.getNeighbors(node, { deep: false, outgoing: true })
-  return nodes
-}
-const cmOptions = {
-  mode: 'text/html', // language mode
-  theme: 'monokai', // theme
-  smartIndent: false,
-  readOnly: true
-}
-// 找到根节点
-const rootNode = () => {
-  const root = graph.getRootNodes()
-  return root[0]
-}
-
-const handleClick = () => {
-  console.log('点击了tab')
+const exportImg = () => {
+  graph.exportPNG('1')
 }
 // eslint-disable-next-line no-undef
 defineExpose({
@@ -93,22 +51,33 @@ defineExpose({
 
 <template>
   <div>
-    <el-dialog class="custom_dialog" v-model="states.dialogVisible" title="预览" :close-on-click-modal="false" width="60%">
-      <el-tabs v-model="states.activeName" class="demo-tabs" @tab-click="handleClick">
-        <el-tab-pane label="XML" name="first">
-          <Codemirror v-model:value="states.xmlCode" :options="cmOptions" border placeholder="test placeholder" :height="400"/>
-        </el-tab-pane>
-        <el-tab-pane label="JSON" name="second">Config</el-tab-pane>
-        <el-tab-pane label="图片" name="second">Config</el-tab-pane>
-      </el-tabs>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="states.dialogVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="states.dialogVisible = false">
-            保存
+    <el-dialog destroy-on-close class="custom_dialog" v-model="states.dialogVisible" title="预览" :close-on-click-modal="false" width="60%">
+      <el-tabs v-model="states.activeName" class="demo-tabs"  @tab-click="handleClick">
+        <el-tab-pane label="XML" name="XML">
+          <codeXmlEditor codeType="application/xml" v-model:value="states.xmlCode"  height-size="400"/>
+          <div style="text-align: center;margin-top:10px">
+            <el-button type="primary" @click="states.dialogVisible = false">
+            保存XML文件
           </el-button>
-        </span>
-      </template>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane  label="JSON" name="JSON">
+          <codeXmlEditor  codeType="application/json" v-model:value="states.jsonCode"   height-size="400"/>
+          <div style="text-align: center;margin-top:10px">
+            <el-button type="primary" @click="states.dialogVisible = false">
+            保存JSON文件
+            </el-button>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane style="height: 400px;" label="IMG" name="IMG">
+          <img :src="states.imgdata" >
+          <div style="text-align: center;margin-top:10px">
+            <el-button type="primary" @click="exportImg">
+            下载图片
+            </el-button>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
     </el-dialog>
   </div>
 </template>

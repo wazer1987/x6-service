@@ -3,6 +3,8 @@ import { Selection } from '@antv/x6-plugin-selection'
 import { History } from '@antv/x6-plugin-history'
 import { Clipboard } from '@antv/x6-plugin-clipboard'
 import { initShortKey, keyboard } from './InitShortKey'
+import { Export } from '@antv/x6-plugin-export'
+
 export const pluginsConfig = {
   // 快捷键插件
   Keyboard: (graph:Graph) => {
@@ -33,5 +35,8 @@ export const pluginsConfig = {
         enabled: true
       })
     )
+  },
+  Export: (graph:Graph) => {
+    graph.use(new Export())
   }
 }
