@@ -29,8 +29,6 @@ const handleClick = (pane: TabsPaneContext, ev: Event) => {
   // console.log(22222)
 
   const { paneName } = pane
-  console.log(pane, '===pane')
-
   if (paneName === 'IMG') {
     initImg()
   }

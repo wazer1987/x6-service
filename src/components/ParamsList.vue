@@ -71,8 +71,8 @@ const value = computed({
 </script>
 
 <template>
-  <div @click="openDialog" style="width:100%;" >
-    <el-input :autosize="{ minRows: 8, maxRows: 12 }" type="textarea" :model-value="value" disabled ></el-input>
+  <div @click="openDialog" style="width:100%;cursor: pointer;" >
+    <el-input :autosize="{ minRows: 8, maxRows: 12 }" type="textarea" :model-value="value"  ></el-input>
   </div>
 
   <el-dialog center :close-on-click-modal="false" v-model="dialogStates.dialogVisible" width="50%">
@@ -116,9 +116,10 @@ const value = computed({
 </template>
 
 <style scoped lang="scss">
-.el-input {
-  :deep(.el-input__inner) {
+.el-textarea {
+  :deep(.el-textarea__inner) {
     cursor: pointer !important;
+    pointer-events: none;
   }
 }
 </style>

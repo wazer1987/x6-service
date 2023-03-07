@@ -11,6 +11,9 @@ const form = reactive({
 
   ]
 })
+const test = () => {
+  console.log(222)
+}
 const formRef = ref(null)
 const clearForm = () => {
   formRef.value.resetFields()
@@ -40,6 +43,11 @@ defineExpose({
   </el-form>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.el-input {
+  :deep(.el-input__inner) {
+    cursor: pointer !important;
+  }
+}
 
 </style>
