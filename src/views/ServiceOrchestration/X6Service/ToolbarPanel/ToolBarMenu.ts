@@ -9,8 +9,8 @@ export const toolbarMenu = [
   { label: '放大', command: 'crtl++', icon: 'iconfont git-icon-zoom-in' },
   { label: '缩小', command: 'crtl+-', icon: 'iconfont git-icon-zoom-out' },
   { label: '预览', command: 'preview', icon: 'iconfont git-icon-preview' },
-  { label: '上传', command: 'upload', icon: 'iconfont git-icon-upload' },
-  { label: '下载', command: 'down', icon: 'iconfont git-icon-download' }
+  { label: '上传JSON', command: 'upload', icon: 'iconfont git-icon-upload' }
+  // { label: '下载', command: 'down', icon: 'iconfont git-icon-download' }
 ]
 
 export const toolbarMenuFn = {

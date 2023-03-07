@@ -136,14 +136,8 @@ export default defineComponent({
         })
       }
     })
-    // watch(() => {
-    //   return props.value
-    // }, () => {
-    //   console.log(222)
-    // })
+
     onMounted(() => {
-      console.log(222)
-      // console.log('value:', props.value)
       data.importThemDynamic().then(() => {
         data.initialize()
       })

@@ -3,8 +3,8 @@ import { Graph } from '@antv/x6'
 import { reactive, ref } from 'vue'
 import codeXmlEditor from '@/components/codeXmlEditor.vue'
 import { genXML } from '@/gencode/genXML'
-import { TabsPaneContext } from 'element-plus'
-import item from 'element-plus/es/components/space/src/item'
+import { TabsPaneContext, ElMessageBox } from 'element-plus'
+import { saveAs } from 'file-saver'
 // @types/codemirror
 const states = reactive({
   dialogVisible: false,
@@ -26,20 +26,64 @@ const openDialog = (cavans: Graph) => {
 }
 
 const handleClick = (pane: TabsPaneContext, ev: Event) => {
-  // console.log(22222)
-
   const { paneName } = pane
   if (paneName === 'IMG') {
     initImg()
   }
 }
+// 保存xml文件
+const saveXML = () => {
+  console.log('保存xml')
+  ElMessageBox.prompt('请输入文件名称', '文件名称', {
+    confirmButtonText: '保存',
+    cancelButtonText: '取消',
+    inputErrorMessage: 'Invalid Email'
+  })
+    .then(({ value }) => {
+      console.log('保存成功')
+      const blob = new Blob([states.xmlCode], { type: 'application/xml;charset="utf-8"' })
+      saveAs(blob, `${value}.xml`)
+    })
+    .catch(() => {
+      console.log('保存失败')
+    })
+}
+
+const saveJSON = () => {
+  console.log('保存JSON')
+  ElMessageBox.prompt('请输入文件名称', '文件名称', {
+    confirmButtonText: '保存',
+    cancelButtonText: '取消',
+    inputErrorMessage: 'Invalid Email'
+  })
+    .then(({ value }) => {
+      console.log('保存成功')
+      const blob = new Blob([states.jsonCode], { type: 'application/json;charset="utf-8"' })
+      saveAs(blob, `${value}.json`)
+    })
+    .catch(() => {
+      console.log('保存失败')
+    })
+}
+// 渲染图片
 const initImg = () => {
   graph.toPNG((dataUri: string) => {
     states.imgdata = dataUri
   })
 }
+// 导出图片
 const exportImg = () => {
-  graph.exportPNG('1')
+  ElMessageBox.prompt('请输入图片名称', '图片名称', {
+    confirmButtonText: '保存',
+    cancelButtonText: '取消',
+    inputErrorMessage: 'Invalid Email'
+  })
+    .then(({ value }) => {
+      graph.exportPNG(value)
+    })
+    .catch(() => {
+      console.log('保存失败')
+    })
 }
 // eslint-disable-next-line no-undef
 defineExpose({
@@ -54,7 +98,7 @@ defineExpose({
         <el-tab-pane label="XML" name="XML">
           <codeXmlEditor codeType="application/xml" v-model:value="states.xmlCode"  height-size="400"/>
           <div style="text-align: center;margin-top:10px">
-            <el-button type="primary" @click="states.dialogVisible = false">
+            <el-button type="primary" @click="saveXML">
             保存XML文件
           </el-button>
           </div>
@@ -62,13 +106,15 @@ defineExpose({
         <el-tab-pane  label="JSON" name="JSON">
           <codeXmlEditor  codeType="application/json" v-model:value="states.jsonCode"   height-size="400"/>
           <div style="text-align: center;margin-top:10px">
-            <el-button type="primary" @click="states.dialogVisible = false">
+            <el-button type="primary" @click="saveJSON">
             保存JSON文件
             </el-button>
           </div>
         </el-tab-pane>
-        <el-tab-pane style="height: 400px;" label="IMG" name="IMG">
-          <img :src="states.imgdata" >
+        <el-tab-pane label="IMG" name="IMG">
+          <div style="text-align: center;">
+            <img style="width: 100%;" :src="states.imgdata" >
+          </div>
           <div style="text-align: center;margin-top:10px">
             <el-button type="primary" @click="exportImg">
             下载图片

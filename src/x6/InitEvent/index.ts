@@ -85,6 +85,7 @@ export const uselogicHook = () => {
         console.log(edge)
         nodeOperdeDom.value.edgeOpenDrawer(edge, canvas, 'edge')
       }
+      rightMenuRef.value.clearRightMenu()
     },
     delete: () => {
     // 删除 拿到当前右键的节点 然后打开 删除节点

@@ -8,15 +8,34 @@ let graph: Graph
 const init = (cavans) => {
   graph = cavans
 }
+
+// 文件框组件
+const fileREF = ref()
 // 弹框相关
 const previewRef = ref()
 
 const commadClick = (item: any) => {
-  if (item.command === 'preview' || item.command === 'upload' || item.command === 'down') {
+  if (item.command === 'upload') {
+    fileREF.value.click()
+    return
+  }
+  if (item.command === 'preview') {
     previewRef.value.openDialog(graph)
     return
   }
   toolbarMenuFn[item.command](graph)
+}
+
+const changeFile = ({ target }) => {
+  const files = target.files[0]
+  const reader = new FileReader()
+  reader.readAsText(files, 'UTF-8')
+  reader.onload = function (e) {
+    // 文件内容字符串
+    // eslint-disable-next-line camelcase
+    const file_string = e.target.result
+    graph.fromJSON(JSON.parse(file_string))
+  }
 }
 
 // eslint-disable-next-line no-undef
@@ -36,6 +55,7 @@ defineExpose({
         <i :class="item.icon"></i>
       </div>
     </div>
+    <input ref="fileREF" @change="changeFile" accept=".json" type="file" style="display: none;">
     <Preview ref="previewRef" />
   </div>
 </template>

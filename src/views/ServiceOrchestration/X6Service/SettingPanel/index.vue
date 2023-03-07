@@ -303,13 +303,13 @@ defineExpose({
           </el-form-item>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane name="generateConfig" label="生成设置">
+      <!-- <el-tab-pane name="generateConfig" label="生成设置">
         <el-button @click="exportData">导出数据</el-button>
         <el-button @click="importData">导入数据</el-button>
         <el-button @click="downImg">生成图片</el-button>
         <el-button @click="tinkTrace">链路跟踪</el-button>
         <el-input style="margin-top:20px;" v-model="NodeId.id" />
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
   </el-drawer>
 </template>
