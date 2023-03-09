@@ -42,7 +42,6 @@ import { reactive, defineComponent, toRefs, getCurrentInstance, onMounted, onBef
 // 但 vue 貌似没有无法在实例初始化后再动态加载对应 JS ，所以此处才把对应的 JS 提前引入
 import 'codemirror/mode/clike/clike.js'
 import 'codemirror/mode/r/r.js'
-console.log('看看走了几次')
 
 const codemirrorThemList = []
 const requireModules = require.context('codemirror/theme/', false, /\.css$/)

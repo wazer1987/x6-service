@@ -72,11 +72,11 @@ const value = computed({
 
 <template>
   <div @click="openDialog" style="width:100%;cursor: pointer;" >
-    <el-input :autosize="{ minRows: 8, maxRows: 12 }" type="textarea" :model-value="value"  ></el-input>
+    <el-input :autosize="{ minRows: 16, maxRows: 18 }" type="textarea" :model-value="value"  disabled></el-input>
   </div>
 
   <el-dialog center :close-on-click-modal="false" v-model="dialogStates.dialogVisible" width="50%">
-  <el-form  label-position="left">
+  <el-form  label-position="left" label-width="80px">
     <el-row :gutter="12" v-for="(item,index) in modelValue" :key="index" class="mb">
       <el-col :span="2">
         <el-button @click="add" v-if="index === 0" type="primary" :icon="Plus" circle />
