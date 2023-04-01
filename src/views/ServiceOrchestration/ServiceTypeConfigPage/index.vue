@@ -3,10 +3,20 @@ import { Edit, CirclePlus, Delete } from '@element-plus/icons-vue'
 import { onMounted } from 'vue'
 import DialogForm from './DialogForm.vue'
 import { usePage } from './IndexHooks'
+import { useRouter } from 'vue-router'
 const { states, pageFn, dialogRef } = usePage()
 onMounted(() => {
   pageFn.init()
 })
+
+const router = useRouter()
+// 去属性设置
+const goNodesPage = () => {
+  router.push({ path: '/nodeconfig' })
+}
+const goChoreographyPage = () => {
+  router.push({ path: '/x6service' })
+}
 </script>
 
 <template>
@@ -26,6 +36,12 @@ onMounted(() => {
                  :icon="Delete"
                  type="danger"
                  @click="pageFn.del">删除</el-button>
+      <el-button :icon="CirclePlus"
+                 type="primary"
+                 @click="goNodesPage">节点设置</el-button>
+      <el-button :icon="CirclePlus"
+                 type="primary"
+                 @click="goChoreographyPage">编排设置</el-button>
     </el-row>
     <div class="mt">
       <el-table v-loading="states.tableLoaidng" :data="states.tableData" style="width: 100%">

@@ -2,6 +2,7 @@
 import { Edit, CirclePlus, Delete } from '@element-plus/icons-vue'
 import DialogForm from './DialogForm.vue'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { getConfigList, editConfigList } from '@/utils'
 const tableLoaidng = ref(false)
 const radioId:any = ref(null)
@@ -41,6 +42,15 @@ const delNodeConfig = (): void => {
   btnLoading.value = false
   init()
 }
+
+const router = useRouter()
+// 去属性设置
+const goPropsPage = () => {
+  router.push({ path: '/serviceconfig' })
+}
+const goChoreographyPage = () => {
+  router.push({ path: '/x6service' })
+}
 </script>
 
 <template>
@@ -60,6 +70,12 @@ const delNodeConfig = (): void => {
                  :icon="Delete"
                  type="danger"
                  @click="delNodeConfig">删除</el-button>
+      <el-button :icon="CirclePlus"
+                 type="primary"
+                 @click="goPropsPage">属性设置</el-button>
+      <el-button :icon="CirclePlus"
+                 type="primary"
+                 @click="goChoreographyPage">编排设置</el-button>
     </el-row>
     <div class="mt">
       <el-table v-loading="tableLoaidng" :data="tableData" style="width: 100%">
