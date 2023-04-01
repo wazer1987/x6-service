@@ -5,13 +5,15 @@ import codeXmlEditor from '@/components/codeXmlEditor.vue'
 import { genXML } from '@/gencode/genXML'
 import { TabsPaneContext, ElMessageBox } from 'element-plus'
 import { saveAs } from 'file-saver'
+import axios from 'axios'
 // @types/codemirror
 const states = reactive({
   dialogVisible: false,
   activeName: 'XML',
   xmlCode: '',
   jsonCode: '',
-  imgdata: ''
+  imgdata: '',
+  tableLoaidng: false
 })
 const josnREF = ref()
 
@@ -20,15 +22,38 @@ let graph: any
 const openDialog = (cavans: Graph) => {
   states.dialogVisible = true
   states.activeName = 'XML'
+  states.jsonCode = ''
+  states.xmlCode = ''
   graph = cavans
-  states.xmlCode = genXML(graph)
-  states.jsonCode = JSON.stringify(graph.toJSON(), null, 2)
+  states.tableLoaidng = true
+  // const { data: { retObj: { camelXm } } } = await requestXML(graph.toJSON())
+  requestXML(graph.toJSON()).then((res:any) => {
+    const { data: { retObj: { camelXml } } } = res
+    states.xmlCode = camelXml
+    states.jsonCode = JSON.stringify(graph.toJSON(), null, 2)
+    states.tableLoaidng = false
+  })
+  // console.log(camelXml, '===camelXml')
+
+  // console.log()
+
+  // states.xmlCode = genXML(graph)
+  // setTimeout(() => {
+  //   states.jsonCode = JSON.stringify(graph.toJSON(), null, 2)
+  // }, 1000)
+}
+
+const requestXML = (json:any):any => {
+  return axios.post('http://10.5.31.12:8665/camelview', { jsonStr: json })
 }
 
 const handleClick = (pane: TabsPaneContext, ev: Event) => {
   const { paneName } = pane
   if (paneName === 'IMG') {
     initImg()
+  } else if (paneName === 'JSON') {
+    states.jsonCode = ''
+    states.jsonCode = JSON.stringify(graph.toJSON(), null, 2)
   }
 }
 // 保存xml文件
@@ -94,7 +119,7 @@ defineExpose({
 <template>
   <div>
     <el-dialog destroy-on-close class="custom_dialog" v-model="states.dialogVisible" title="预览" :close-on-click-modal="false" width="60%">
-      <el-tabs v-model="states.activeName" class="demo-tabs"  @tab-click="handleClick">
+      <el-tabs v-loading="states.tableLoaidng" v-model="states.activeName" class="demo-tabs"  @tab-click="handleClick">
         <el-tab-pane label="XML" name="XML">
           <codeXmlEditor codeType="application/xml" v-model:value="states.xmlCode"  height-size="400"/>
           <div style="text-align: center;margin-top:10px">
