@@ -17,6 +17,10 @@ module.exports = {
     // .set('components',resolve('./src/components'))
     // .set('views',resolve('./src/views'))
     // .set('assets',resolve('./src/assets'))
+    config.plugin('html').tap((args) => {
+      args[0].title = '高伟达软件股份有限公司'
+      return args
+    })
   },
   css: {
     loaderOptions: {
