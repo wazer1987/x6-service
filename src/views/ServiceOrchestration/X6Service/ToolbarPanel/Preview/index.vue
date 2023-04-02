@@ -44,7 +44,7 @@ const openDialog = (cavans: Graph) => {
 }
 
 const requestXML = (json:any):any => {
-  return axios.post('http://10.5.31.12:8665/camelview', { jsonStr: json })
+  return axios.post('http://10.100.3.16:8124/camelview', { jsonStr: json })
 }
 
 const handleClick = (pane: TabsPaneContext, ev: Event) => {
