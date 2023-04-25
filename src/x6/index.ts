@@ -111,18 +111,40 @@ export const initStencil = (Dom: HTMLDivElement) => {
     target: graph,
     stencilGraphWidth: 200,
     stencilGraphHeight: 180,
+    // stencilGraphPadding: 10,
     groups: [
       {
-        title: '节点',
+        title: '自定义组件',
         name: 'group1'
+      },
+      {
+        title: '标准组件',
+        name: 'group2'
       }
     ],
     layoutOptions: {
       columns: 2,
-      columnWidth: 80,
-      rowHeight: 55
+      columnWidth: 100,
+      dx: 5,
+      marginX: -8
+      // rowHeight: 55,
+      // resizeToFit: true
+
     }
   })
   Dom.appendChild(stencil.container)
-  stencil.load(nodeTooLArr, 'group1')
+  console.log(nodeTooLArr, '===nodeTooLArr')
+  // 分组
+  const group = {
+    group1: [],
+    group2: []
+  }
+  // 匹配分数
+  nodeTooLArr.forEach((item:any) => {
+    group[item.data.nodeType].push(item)
+  })
+  // 添加到左侧
+  for (const key in group) {
+    stencil.load(group[key], key)
+  }
 }

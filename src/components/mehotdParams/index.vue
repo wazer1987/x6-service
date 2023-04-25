@@ -87,7 +87,7 @@ const isGlobleOptions = [
 
 <template>
   <div @click="openDialog" class="params_container" style="width:100%;cursor: pointer">
-    <el-input autosize type="textarea" v-model="methodParams" disabled placeholder="请输入方法参数" />
+    <el-input  type="textarea" v-model="methodParams" disabled placeholder="请输入方法参数" />
     <el-dialog :close-on-click-modal="false" :append-to-body="true" v-model="states.dialogVisible" title="方法入参" center
       width="40%">
       <!-- <el-row><el-button type="primary" style="width:100%;" @click="add">添加一组参数</el-button></el-row> -->

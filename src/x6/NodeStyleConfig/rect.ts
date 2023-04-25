@@ -1,11 +1,16 @@
 import { commonStyele } from './commonStyle'
+import set from '@/assets/set.png'
 export default {
-  width: 70,
-  height: 35,
+  width: 80,
+  height: 45,
   markup: [
     {
       tagName: 'rect',
       selector: 'body'
+    },
+    {
+      tagName: 'image',
+      selector: 'image'
     },
     {
       tagName: 'text',
@@ -18,6 +23,14 @@ export default {
       fill: commonStyele.body.fill,
       stroke: commonStyele.body.stroke,
       strokeWidth: commonStyele.body.strokeWidth
+    },
+    image: {
+      'xlink:href':
+      set,
+      width: 10,
+      height: 10,
+      x: 2,
+      y: 2
     },
     text: {
       text: '',

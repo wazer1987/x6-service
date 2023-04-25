@@ -37,7 +37,7 @@ const { menuclick, rightMenuRef, Menu, nodeOperdeDom } = uselogicHook()
     <!-- 顶部toolbar-panel -->
     <ToolbarPanel ref="ToolbarPanelRef"/>
     <!-- 左侧的拖拽 -->
-    <div style="width: 180px;position: relative;border-right: 1px solid #dfe3e8;" ref="stencil"></div>
+    <div style="width: 200px;position: relative;border-right: 1px solid #dfe3e8;" ref="stencil"></div>
 
     <!-- 中间的图区域 -->
     <div style="width: calc(100% - 180px);height: 100%;" ref="graphcontainer"></div>

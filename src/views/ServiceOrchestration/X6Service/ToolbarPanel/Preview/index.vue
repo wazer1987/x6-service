@@ -3,7 +3,7 @@ import { Graph } from '@antv/x6'
 import { reactive, ref } from 'vue'
 import codeXmlEditor from '@/components/codeXmlEditor.vue'
 import { genXML } from '@/gencode/genXML'
-import { TabsPaneContext, ElMessageBox } from 'element-plus'
+import { TabsPaneContext, ElMessageBox, ElMessage } from 'element-plus'
 import { saveAs } from 'file-saver'
 import axios from 'axios'
 // @types/codemirror
@@ -20,19 +20,26 @@ const josnREF = ref()
 let graph: any
 // let xml: any = []
 const openDialog = (cavans: Graph) => {
+  graph = cavans
+  const { cells } = graph.toJSON()
+  if (cells.length === 0) return ElMessage({ message: '画布中没有节点', type: 'warning' })
   states.dialogVisible = true
   states.activeName = 'XML'
   states.jsonCode = ''
   states.xmlCode = ''
-  graph = cavans
-  states.tableLoaidng = true
-  // const { data: { retObj: { camelXm } } } = await requestXML(graph.toJSON())
-  requestXML(graph.toJSON()).then((res:any) => {
-    const { data: { retObj: { camelXml } } } = res
-    states.xmlCode = camelXml
-    states.jsonCode = JSON.stringify(graph.toJSON(), null, 2)
+  states.jsonCode = JSON.stringify(graph.toJSON(), null, 2)
+  try {
+    states.tableLoaidng = true
+    // const { data: { retObj: { camelXm } } } = await requestXML(graph.toJSON())
+    requestXML(graph.toJSON()).then((res:any) => {
+      const { data: { retObj: { camelXml } } } = res
+      states.xmlCode = camelXml
+      states.tableLoaidng = false
+    })
+  } catch (error) {
     states.tableLoaidng = false
-  })
+  }
+
   // console.log(camelXml, '===camelXml')
 
   // console.log()
