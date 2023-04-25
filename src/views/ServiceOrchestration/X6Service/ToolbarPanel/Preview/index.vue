@@ -35,6 +35,8 @@ const openDialog = (cavans: Graph) => {
       const { data: { retObj: { camelXml } } } = res
       states.xmlCode = camelXml
       states.tableLoaidng = false
+    }).catch(() => {
+      states.tableLoaidng = false
     })
   } catch (error) {
     states.tableLoaidng = false
