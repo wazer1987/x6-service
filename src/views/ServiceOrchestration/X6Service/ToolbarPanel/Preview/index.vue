@@ -4,6 +4,7 @@ import { reactive, ref } from 'vue'
 import codeXmlEditor from '@/components/codeXmlEditor.vue'
 import { genXML } from '@/gencode/genXML'
 import { TabsPaneContext, ElMessageBox, ElMessage } from 'element-plus'
+import { replaceJSON } from '@/utils'
 import { saveAs } from 'file-saver'
 import axios from 'axios'
 // @types/codemirror
@@ -31,7 +32,8 @@ const openDialog = (cavans: Graph) => {
   try {
     states.tableLoaidng = true
     // const { data: { retObj: { camelXm } } } = await requestXML(graph.toJSON())
-    requestXML(graph.toJSON()).then((res:any) => {
+    const jsonData = replaceJSON(cells)
+    requestXML({ cells: jsonData }).then((res:any) => {
       const { data: { retObj: { camelXml } } } = res
       states.xmlCode = camelXml
       states.tableLoaidng = false

@@ -7,12 +7,45 @@ import RightMenu from '@/components/RightMenu/RightMenu.vue'
 import { Graph } from '@antv/x6'
 import SettingPanel from './SettingPanel/index.vue'
 import ToolbarPanel from './ToolbarPanel/index.vue'
+import { getQueryParam } from '@/utils/index'
+import axios from 'axios'
+import { ElMessage } from 'element-plus'
 const graphcontainer = ref()
 const stencil = ref()
 const ToolbarPanelRef = ref()
+const loading = ref(false)
 let graph: Graph
 
+// 查询 xml图
+const getXmlImg = (params:any):any => {
+  return axios.get('http://10.100.3.16:8124/tbCamelDeploy/findByCode', {
+    params
+  })
+}
+
 onMounted(() => {
+  // 获取路由代码id
+  const params = getQueryParam()
+  sessionStorage.setItem('routerCode', JSON.stringify(params))
+  params.routeName = decodeURI(params.routeName)
+  loading.value = true
+  // 查询图标
+  getXmlImg(params).then((res:any) => {
+    const { data: { code, retObj } } = res
+    if (code === '000000') {
+      loading.value = false
+      if (JSON.stringify(retObj) === '{}') {
+        sessionStorage.setItem('flag', '0')
+        return ElMessage({ message: '请绘制！', type: 'success' })
+      }
+      const json = JSON.parse(retObj.routeJson)
+      graph.fromJSON(json)
+    }
+  }).catch((e) => {
+    loading.value = false
+  })
+  // console.log(decodeURI(params.routeName), '===params')
+
   // 初始化画布 和画布的配置 和插件
   graph = initX6(graphcontainer.value)
   // 初始化 左侧工具栏
@@ -33,7 +66,7 @@ const { menuclick, rightMenuRef, Menu, nodeOperdeDom } = uselogicHook()
 </script>
 
 <template>
-  <div style="display: flex; position: relative;">
+  <div v-loading="loading" style="display: flex; position: relative;">
     <!-- 顶部toolbar-panel -->
     <ToolbarPanel ref="ToolbarPanelRef"/>
     <!-- 左侧的拖拽 -->

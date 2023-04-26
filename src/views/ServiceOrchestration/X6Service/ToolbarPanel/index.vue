@@ -4,10 +4,70 @@ import { Graph } from '@antv/x6'
 import { onMounted, ref } from 'vue'
 import { toolbarMenu, toolbarMenuFn } from './ToolBarMenu'
 import Preview from './Preview/index.vue'
+import { replaceJSON } from '@/utils'
+import { ElMessage } from 'element-plus'
+import axios from 'axios'
+
 let graph: Graph
 const init = (cavans) => {
   graph = cavans
 }
+
+// 调用保存 去后台保存
+const save = (graph:Graph) => {
+  const flag = sessionStorage.getItem('flag')
+  console.log(typeof flag, '===flag')
+
+  const { cells } = graph.toJSON()
+  if (cells.length <= 1) return ElMessage({ message: '不符合规则', type: 'warning' })
+  // 在开始节点上添加路由代码 发送给后台
+  const jsonData = replaceJSON(cells)
+
+  // 第一次保存掉这个接口
+  if (flag === '0') {
+    saveJSON({ cells: jsonData }).then((res) => {
+      const { data } = res
+      if (data.code === '000000') {
+        return ElMessage({ message: data.message, type: 'success' })
+      } else {
+        return ElMessage({ message: data.message, type: 'warning' })
+      }
+    })
+  } else {
+    updateJSON({ cells: jsonData }).then(res => {
+      const { data } = res
+      if (data.code === '000000') {
+        return ElMessage({ message: data.message, type: 'success' })
+      } else {
+        return ElMessage({ message: data.message, type: 'warning' })
+      }
+    })
+  }
+}
+
+// 调用后台接口保存JSON
+const saveJSON = (json:any):any => {
+  return axios.post('http://10.100.3.16:8124/tbCamelDeploy', {
+    jsonStr: json,
+    routeCode: JSON.parse(sessionStorage.getItem('routerCode') as string).routeCode,
+    routeVersion: JSON.parse(sessionStorage.getItem('routerCode') as string).routeVersion,
+    bankCode: '01121'
+  })
+}
+
+const updateJSON = (json:any) => {
+  return axios({
+    method: 'PUT',
+    url: 'http://10.100.3.16:8124/tbCamelDeploy',
+    data: {
+      jsonStr: json,
+      routeCode: JSON.parse(sessionStorage.getItem('routerCode') as string).routeCode,
+      routeVersion: JSON.parse(sessionStorage.getItem('routerCode') as string).routeVersion,
+      bankCode: '01121'
+    }
+  })
+}
+// 更新的时候调用的接口
 
 // 文件框组件
 const fileREF = ref()
@@ -21,6 +81,10 @@ const commadClick = (item: any) => {
   }
   if (item.command === 'preview') {
     previewRef.value.openDialog(graph)
+    return
+  }
+  if (item.command === 'save') {
+    save(graph)
     return
   }
   toolbarMenuFn[item.command](graph)
