@@ -46,8 +46,9 @@ const save = (graph:Graph) => {
       closeOnPressEscape: false,
       closeOnClickModal: false,
       // 已经发布的 才会显示升级版本号
-      confirmButtonText: deployStatus === '0' ? '' : '升级版本',
-      cancelButtonText: '保存原图'
+      confirmButtonText: '升级版本',
+      cancelButtonText: '保存原图',
+      showConfirmButton: deployStatus !== '0'
     })
       .then((value) => {
         updateJSON({ cells: jsonData }, '1').then(res => {
