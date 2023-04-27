@@ -39,7 +39,9 @@ const save = (graph:Graph) => {
     })
   } else {
     const deployStatus = JSON.parse(sessionStorage.getItem('routerCode') as string).deployStatus
-    ElMessageBox.confirm('点击升级版本会生成一个新的版本服务编排图,点击保存原图即在原有版本上保存服务编排图', '升级版本号', {
+    const title = deployStatus === '0' ? '保存原图' : '升级版本号'
+    const titleInfo = deployStatus === '0' ? '请保存绘制好的服务编排图' : '点击升级版本会生成一个新的版本服务编排图,点击保存原图即在原有版本上保存服务编排图'
+    ElMessageBox.confirm(titleInfo, title, {
       distinguishCancelAndClose: true,
       closeOnPressEscape: false,
       closeOnClickModal: false,
