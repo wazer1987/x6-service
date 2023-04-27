@@ -29,17 +29,23 @@ onMounted(() => {
   sessionStorage.setItem('routerCode', JSON.stringify(params))
   params.routeName = decodeURI(params.routeName)
   loading.value = true
-  // 查询图标
+  // 查询图表
   getXmlImg(params).then((res:any) => {
     const { data: { code, retObj } } = res
     if (code === '000000') {
       loading.value = false
+      // 第一次进入设计器 没有图表需要绘制 并设置未第一次进入的标识
       if (JSON.stringify(retObj) === '{}') {
         sessionStorage.setItem('flag', '0')
         return ElMessage({ message: '请绘制！', type: 'success' })
+      } else {
+        // 第二次进入 查回来数据 需要显示在设计器上 并取到状态
+        const json = JSON.parse(retObj.routeJson)
+        const routerCode = JSON.parse(sessionStorage.getItem('routerCode') as string)
+        routerCode.deployStatus = retObj.deployStatus
+        sessionStorage.setItem('routerCode', JSON.stringify(routerCode))
+        graph.fromJSON(json)
       }
-      const json = JSON.parse(retObj.routeJson)
-      graph.fromJSON(json)
     }
   }).catch((e) => {
     loading.value = false

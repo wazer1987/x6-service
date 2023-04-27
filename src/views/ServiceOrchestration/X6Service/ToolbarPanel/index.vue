@@ -5,13 +5,14 @@ import { onMounted, ref } from 'vue'
 import { toolbarMenu, toolbarMenuFn } from './ToolBarMenu'
 import Preview from './Preview/index.vue'
 import { replaceJSON } from '@/utils'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import axios from 'axios'
 
 let graph: Graph
 const init = (cavans) => {
   graph = cavans
 }
+const versionFlag = ref(false)
 
 // 调用保存 去后台保存
 const save = (graph:Graph) => {
@@ -27,27 +28,62 @@ const save = (graph:Graph) => {
   if (flag === '0') {
     saveJSON({ cells: jsonData }).then((res) => {
       const { data } = res
+      console.log(data, '===data')
       if (data.code === '000000') {
         return ElMessage({ message: data.message, type: 'success' })
       } else {
         return ElMessage({ message: data.message, type: 'warning' })
       }
+    }).catch((e) => {
+      return ElMessage({ message: '失败', type: 'warning' })
     })
   } else {
-    updateJSON({ cells: jsonData }).then(res => {
-      const { data } = res
-      if (data.code === '000000') {
-        return ElMessage({ message: data.message, type: 'success' })
-      } else {
-        return ElMessage({ message: data.message, type: 'warning' })
-      }
+    const deployStatus = JSON.parse(sessionStorage.getItem('routerCode') as string).deployStatus
+    ElMessageBox.confirm('点击升级版本会生成一个新的版本服务编排图,点击保存原图即在原有版本上保存服务编排图', '升级版本号', {
+      distinguishCancelAndClose: true,
+      closeOnPressEscape: false,
+      closeOnClickModal: false,
+      // 已经发布的 才会显示升级版本号
+      confirmButtonText: deployStatus === '0' ? '' : '升级版本',
+      cancelButtonText: '保存原图'
     })
+      .then((value) => {
+        updateJSON({ cells: jsonData }, '1').then(res => {
+          const { data } = res
+          if (data.code === '000000') {
+            window.opener.postMessage('getTableList', 'http://10.100.3.38:9084')
+            return ElMessage({ message: data.message, type: 'success' })
+          } else {
+            return ElMessage({ message: data.message, type: 'warning' })
+          }
+        }).catch((e) => {
+          return ElMessage({ message: '失败', type: 'warning' })
+        })
+      })
+      .catch((e) => {
+        console.log(e, '===e')
+        if (e === 'cancel') {
+          updateJSON({ cells: jsonData }, '0').then(res => {
+            const { data } = res
+            if (data.code === '000000') {
+              return ElMessage({ message: data.message, type: 'success' })
+            } else {
+              return ElMessage({ message: data.message, type: 'warning' })
+            }
+          }).catch((e) => {
+            return ElMessage({ message: '失败', type: 'warning' })
+          })
+        }
+      })
   }
 }
 
+const apis = 'http://10.100.3.16:8124/tbCamelDeploy'
+// const apis = 'http://10.10.2.109:8124/tbCamelDeploy'
+
 // 调用后台接口保存JSON
 const saveJSON = (json:any):any => {
-  return axios.post('http://10.100.3.16:8124/tbCamelDeploy', {
+  return axios.post(apis, {
     jsonStr: json,
     routeCode: JSON.parse(sessionStorage.getItem('routerCode') as string).routeCode,
     routeVersion: JSON.parse(sessionStorage.getItem('routerCode') as string).routeVersion,
@@ -55,15 +91,16 @@ const saveJSON = (json:any):any => {
   })
 }
 
-const updateJSON = (json:any) => {
+const updateJSON = (json:any, overflag:string) => {
   return axios({
     method: 'PUT',
-    url: 'http://10.100.3.16:8124/tbCamelDeploy',
+    url: apis,
     data: {
       jsonStr: json,
       routeCode: JSON.parse(sessionStorage.getItem('routerCode') as string).routeCode,
       routeVersion: JSON.parse(sessionStorage.getItem('routerCode') as string).routeVersion,
-      bankCode: '01121'
+      bankCode: '01121',
+      overflag
     }
   })
 }
