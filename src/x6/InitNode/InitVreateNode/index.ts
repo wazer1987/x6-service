@@ -17,9 +17,10 @@ import { getServicePropItem } from '@/utils/index'
 //   return obj
 // }
 // 左侧添加节点图形
-export const initCreateNode = (item:NodeListItem, graph:Graph) => {
+export const initCreateNode = (item:NodeListItem, graph:Graph, data:any) => {
   // 去服务里面拿服务属性然后找到对应的赋值到节点上
-  const servicePropList = getServicePropItem()
+  // const servicePropList = getServicePropItem()
+  const servicePropList = data.serviceList
   const { meanName, serviceParams, serviceType } = servicePropList.find((propitem:any) => propitem.meanName === item.serviceType)
   return graph.createNode({
     shape: `custom-${item.id}-${item.nodeShape}`,

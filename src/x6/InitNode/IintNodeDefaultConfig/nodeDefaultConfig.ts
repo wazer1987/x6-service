@@ -125,11 +125,11 @@ const nodeDefaultConfig = {
 export const initNodeDefaultOptions = (data:any, graph:Graph) => {
   const nodeArray:any = []
   console.log(data, '====data')
-  data.forEach((item:NodeListItem) => {
+  data.nodeList.forEach((item:NodeListItem) => {
     nodeDefaultConfig[item.nodeShape](item)
     // 注册节点的方法
     initNodeTool(item)
-    nodeArray.push(initCreateNode(item, graph))
+    nodeArray.push(initCreateNode(item, graph, data))
   })
   return nodeArray
 }

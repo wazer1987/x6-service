@@ -5,12 +5,19 @@ import { Stencil } from '@antv/x6-plugin-stencil'
 import { initEdge } from './InitEdge'
 import { initNodeDefaultOptions } from './InitNode/index'
 import { initPlugins } from './InitPlugins'
+import { getNodeList } from '@/utils/fetch'
 let graph: Graph
 let data :any
 let nodeTooLArr:any = []
 
-export const initX6 = (Dom: HTMLDivElement) => {
-  data = getConfigList()
+export const initX6 = async (Dom: HTMLDivElement) => {
+  // data = getConfigList()
+  const res = await getNodeList()
+  console.log(res, '===res')
+
+  if (res.data.code === '200') {
+    data = res.data.retObj
+  }
   graph = new Graph({
     container: Dom,
     height: window.innerHeight,

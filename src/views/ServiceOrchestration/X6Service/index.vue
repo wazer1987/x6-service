@@ -23,7 +23,7 @@ const getXmlImg = (params:any):any => {
   })
 }
 
-onMounted(() => {
+onMounted(async () => {
   // 获取路由代码id
   const params = getQueryParam()
   sessionStorage.setItem('routerCode', JSON.stringify(params))
@@ -53,7 +53,7 @@ onMounted(() => {
   // console.log(decodeURI(params.routeName), '===params')
 
   // 初始化画布 和画布的配置 和插件
-  graph = initX6(graphcontainer.value)
+  graph = await initX6(graphcontainer.value)
   // 初始化 左侧工具栏
   initStencil(stencil.value)
   // 初始化事件
